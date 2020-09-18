@@ -67,6 +67,7 @@ public class ClienteController {
 		cliente.setId(clienteId);
 		cliente.getEndereco().setId(clienteExistente.get().getEndereco().getId());
 		cliente.getTelefone().setId(clienteExistente.get().getTelefone().getId());
+		cliente.getUsuario().setId(clienteExistente.get().getUsuario().getId());
 		cliente = cadastroClienteService.salvar(cliente);
 		return ResponseEntity.ok(cliente);
 	}
@@ -74,7 +75,7 @@ public class ClienteController {
 	
 	@DeleteMapping("/{clienteId}")
 	public ResponseEntity<Void> excluir(@PathVariable Long clienteId) {
-		if (clienteRepository.existsById(clienteId)) {
+		if (!clienteRepository.existsById(clienteId)) {
 			return ResponseEntity.notFound().build();		
 		}
 		
