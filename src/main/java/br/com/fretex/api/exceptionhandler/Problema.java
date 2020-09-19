@@ -3,10 +3,14 @@ package br.com.fretex.api.exceptionhandler;
 import java.time.OffsetDateTime;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
 public class Problema {
 	private Integer status;
 	private OffsetDateTime dataHora;
 	private String titulo;
+	@JsonInclude(value = Include.NON_NULL)
 	private List<Campo> campos;
 
 	public static class Campo {

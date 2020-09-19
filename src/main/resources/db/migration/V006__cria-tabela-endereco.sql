@@ -4,6 +4,7 @@ CREATE TABLE endereco
    	cep varchar(8) not null,
 	logradouro varchar(120) not null,
 	numero varchar(20) not null,
+	bairro varchar(50) not null,
 	complemento varchar(120),
 	cidade_id bigint not null,
 	latitude decimal,

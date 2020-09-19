@@ -3,7 +3,6 @@ package br.com.fretex.domain.model;
 import java.time.LocalDate;
 
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -11,11 +10,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
-
-import com.sun.istack.NotNull;
 
 @Entity
 public class Cliente {
@@ -24,36 +18,22 @@ public class Cliente {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@NotBlank
-	@Size(max = 120)
 	private String nome;
-
-	@Size(max = 120)
 	private String nomeFantasia;
-
-	@NotBlank
-	@Size(min = 11, max = 14)
 	private String cnp;
 
 	@Enumerated(EnumType.STRING)
-	@Column(name = "tipo_pessoa")
-	private TipoPessoa tipo;
+	private TipoPessoa tipoPessoa;
 
-	@NotNull
-	// @JsonFormat(pattern = "dd-MM-yyyy")
 	private LocalDate dataNascimento;
+	private String email;
 
 	@OneToOne(cascade = CascadeType.ALL)
 	private Endereco endereco;
 
-	@NotBlank
-	@Email
-	private String email;
-
 	@OneToOne(cascade = CascadeType.ALL)
 	private Telefone telefone;
 
-	@NotNull
 	@OneToOne(cascade = CascadeType.ALL)
 	private Usuario usuario;
 
@@ -89,12 +69,12 @@ public class Cliente {
 		this.cnp = cnp;
 	}
 
-	public TipoPessoa getTipo() {
-		return tipo;
+	public TipoPessoa getTipoPessoa() {
+		return tipoPessoa;
 	}
 
-	public void setTipo(TipoPessoa tipo) {
-		this.tipo = tipo;
+	public void setTipoPessoa(TipoPessoa tipoPessoa) {
+		this.tipoPessoa = tipoPessoa;
 	}
 
 	public LocalDate getDataNascimento() {
@@ -105,20 +85,20 @@ public class Cliente {
 		this.dataNascimento = dataNascimento;
 	}
 
-	public Endereco getEndereco() {
-		return endereco;
-	}
-
-	public void setEndereco(Endereco endereco) {
-		this.endereco = endereco;
-	}
-
 	public String getEmail() {
 		return email;
 	}
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	public Endereco getEndereco() {
+		return endereco;
+	}
+
+	public void setEndereco(Endereco endereco) {
+		this.endereco = endereco;
 	}
 
 	public Telefone getTelefone() {
@@ -140,7 +120,7 @@ public class Cliente {
 	@Override
 	public int hashCode() {
 		final int prime = 31;
-		int result = super.hashCode();
+		int result = 1;
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		return result;
 	}
@@ -149,7 +129,7 @@ public class Cliente {
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
-		if (!super.equals(obj))
+		if (obj == null)
 			return false;
 		if (getClass() != obj.getClass())
 			return false;

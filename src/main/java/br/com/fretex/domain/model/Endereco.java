@@ -5,9 +5,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 @Entity
 public class Endereco {
@@ -16,23 +13,12 @@ public class Endereco {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@NotBlank
-	@Size(min = 8, max = 8)
 	private String cep;
-
-	@NotBlank
-	@Size(max = 120)
 	private String logradouro;
-
-	@NotBlank
-	@Size(max = 20)
 	private String numero;
-
-	@NotBlank
-	@Size(max = 120)
+	private String bairro;
 	private String complemento;
 
-	@NotNull
 	@OneToOne
 	private Cidade cidade;
 
@@ -69,6 +55,14 @@ public class Endereco {
 
 	public void setNumero(String numero) {
 		this.numero = numero;
+	}
+
+	public String getBairro() {
+		return bairro;
+	}
+
+	public void setBairro(String bairro) {
+		this.bairro = bairro;
 	}
 
 	public String getComplemento() {

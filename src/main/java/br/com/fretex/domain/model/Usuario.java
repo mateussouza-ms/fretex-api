@@ -6,8 +6,8 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
+
+import br.com.fretex.domain.exception.NegocioException;
 
 @Entity
 public class Usuario {
@@ -16,13 +16,19 @@ public class Usuario {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@NotBlank
-	@Size(max = 120)
 	private String senha;
 
 	@Enumerated(EnumType.STRING)
 	private SituacaoUsuario situacao;
 
+	public void desativar() {
+		if (getSituacao().equals(SituacaoUsuario.INATIVO)) {
+			throw new NegocioException("O usuário não está ativo");	
+		}
+		
+		setSituacao(SituacaoUsuario.INATIVO);
+	}
+	
 	public Long getId() {
 		return id;
 	}
