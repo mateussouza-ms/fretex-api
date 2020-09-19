@@ -1,14 +1,17 @@
 package br.com.fretex.domain.model;
 
+import java.util.List;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 @Entity
-public class Cliente {
+public class PrestadorServico {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,6 +19,9 @@ public class Cliente {
 
 	@OneToOne(cascade = CascadeType.ALL)
 	private Usuario usuario;
+
+	@OneToMany(mappedBy = "prestadorServico")
+	private List<Veiculo> veiculos;
 
 	public Long getId() {
 		return id;
@@ -31,6 +37,14 @@ public class Cliente {
 
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
+	}
+
+	public List<Veiculo> getVeiculos() {
+		return veiculos;
+	}
+
+	public void setVeiculos(List<Veiculo> veiculos) {
+		this.veiculos = veiculos;
 	}
 
 	@Override
@@ -49,7 +63,7 @@ public class Cliente {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Cliente other = (Cliente) obj;
+		PrestadorServico other = (PrestadorServico) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;

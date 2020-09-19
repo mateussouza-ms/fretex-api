@@ -1,11 +1,15 @@
 package br.com.fretex.domain.model;
 
+import java.time.LocalDate;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
 import br.com.fretex.domain.exception.NegocioException;
 
@@ -16,6 +20,22 @@ public class Usuario {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
+	private String nome;
+	private String nomeFantasia;
+	private String cnp;
+
+	@Enumerated(EnumType.STRING)
+	private TipoPessoa tipoPessoa;
+
+	private LocalDate dataNascimento;
+	private String email;
+
+	@OneToOne(cascade = CascadeType.ALL)
+	private Endereco endereco;
+
+	@OneToOne(cascade = CascadeType.ALL)
+	private Telefone telefone;
+
 	private String senha;
 
 	@Enumerated(EnumType.STRING)
@@ -23,18 +43,82 @@ public class Usuario {
 
 	public void desativar() {
 		if (getSituacao().equals(SituacaoUsuario.INATIVO)) {
-			throw new NegocioException("O usuário não está ativo");	
+			throw new NegocioException("O usuário não está ativo");
 		}
-		
+
 		setSituacao(SituacaoUsuario.INATIVO);
 	}
-	
+
 	public Long getId() {
 		return id;
 	}
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public String getNome() {
+		return nome;
+	}
+
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+
+	public String getNomeFantasia() {
+		return nomeFantasia;
+	}
+
+	public void setNomeFantasia(String nomeFantasia) {
+		this.nomeFantasia = nomeFantasia;
+	}
+
+	public String getCnp() {
+		return cnp;
+	}
+
+	public void setCnp(String cnp) {
+		this.cnp = cnp;
+	}
+
+	public TipoPessoa getTipoPessoa() {
+		return tipoPessoa;
+	}
+
+	public void setTipoPessoa(TipoPessoa tipoPessoa) {
+		this.tipoPessoa = tipoPessoa;
+	}
+
+	public LocalDate getDataNascimento() {
+		return dataNascimento;
+	}
+
+	public void setDataNascimento(LocalDate dataNascimento) {
+		this.dataNascimento = dataNascimento;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public Endereco getEndereco() {
+		return endereco;
+	}
+
+	public void setEndereco(Endereco endereco) {
+		this.endereco = endereco;
+	}
+
+	public Telefone getTelefone() {
+		return telefone;
+	}
+
+	public void setTelefone(Telefone telefone) {
+		this.telefone = telefone;
 	}
 
 	public String getSenha() {

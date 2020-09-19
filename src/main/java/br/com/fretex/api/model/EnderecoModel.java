@@ -2,7 +2,7 @@ package br.com.fretex.api.model;
 
 import br.com.fretex.domain.model.Cidade;
 
-public class EnderecoClienteModel {
+public class EnderecoModel {
 	private String cep;
 	private String logradouro;
 	private String numero;

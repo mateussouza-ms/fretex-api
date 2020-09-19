@@ -9,7 +9,7 @@ import br.com.fretex.domain.model.SituacaoUsuario;
 import br.com.fretex.domain.model.Telefone;
 import br.com.fretex.domain.model.TipoPessoa;
 
-public class ClienteModel {
+public class UsuarioModel {
 	private Long id;
 	private String nome;
 
@@ -20,7 +20,7 @@ public class ClienteModel {
 	private TipoPessoa tipoPessoa;
 	private LocalDate dataNascimento;
 	private String email;
-	private EnderecoClienteModel endereco;
+	private EnderecoModel endereco;
 	private Telefone telefone;
 	private SituacaoUsuario situacaoUsuario;
 
@@ -80,11 +80,11 @@ public class ClienteModel {
 		this.email = email;
 	}
 
-	public EnderecoClienteModel getEndereco() {
+	public EnderecoModel getEndereco() {
 		return endereco;
 	}
 
-	public void setEndereco(EnderecoClienteModel endereco) {
+	public void setEndereco(EnderecoModel endereco) {
 		this.endereco = endereco;
 	}
 
