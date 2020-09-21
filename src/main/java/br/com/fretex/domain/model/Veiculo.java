@@ -17,6 +17,7 @@ public class Veiculo {
 
 	@ManyToOne
 	private PrestadorServico prestadorServico;
+	private String nome;
 	private BigDecimal pesoMaximo;
 	private String outrasCaracteristicas;
 
@@ -34,6 +35,14 @@ public class Veiculo {
 
 	public void setPrestadorServico(PrestadorServico prestadorServico) {
 		this.prestadorServico = prestadorServico;
+	}
+
+	public String getNome() {
+		return nome;
+	}
+
+	public void setNome(String nome) {
+		this.nome = nome;
 	}
 
 	public BigDecimal getPesoMaximo() {

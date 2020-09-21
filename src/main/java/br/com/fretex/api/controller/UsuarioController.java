@@ -2,11 +2,9 @@ package br.com.fretex.api.controller;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.fretex.api.model.UsuarioInput;
 import br.com.fretex.api.model.UsuarioModel;
+import br.com.fretex.api.util.Mapper;
 import br.com.fretex.domain.model.Usuario;
 import br.com.fretex.domain.repository.UsuarioRepository;
 import br.com.fretex.domain.service.CadastroUsuarioService;
@@ -35,14 +34,14 @@ public class UsuarioController {
 
 	@Autowired
 	private CadastroUsuarioService cadastroUsuarioService;
-
+	
 	@Autowired
-	ModelMapper modelMapper;
+	private Mapper mapper;
 
 	@ResponseStatus(code = HttpStatus.CREATED)
 	@PostMapping
 	public UsuarioModel adicionar(@Valid @RequestBody UsuarioInput usuarioInput) {
-		return toModel(cadastroUsuarioService.salvar(toEntity(usuarioInput)));
+		return mapper.toModel(cadastroUsuarioService.salvar(mapper.toEntity(usuarioInput, Usuario.class)), UsuarioModel.class);
 	}
 
 	@GetMapping("/{usuarioId}")
@@ -53,12 +52,12 @@ public class UsuarioController {
 			return ResponseEntity.notFound().build();
 		}
 
-		return ResponseEntity.ok(toModel(usuario.get()));
+		return ResponseEntity.ok(mapper.toModel(usuario.get(), UsuarioModel.class));
 	}
 
 	@GetMapping
 	public List<UsuarioModel> listar() {
-		return toCollectionModel(usuarioRepository.findAll());
+		return mapper.toCollectionModel(usuarioRepository.findAll(), UsuarioModel.class);
 	}
 
 	@PutMapping("/{usuarioId}")
@@ -69,13 +68,13 @@ public class UsuarioController {
 		if (!usuarioExistente.isPresent()) {
 			return ResponseEntity.notFound().build();
 		}
-		var usuario = toEntity(usuarioInput);
+		var usuario = mapper.toEntity(usuarioInput, Usuario.class);
 
 		usuario.setId(usuarioId);
 		usuario.getEndereco().setId(usuarioExistente.get().getEndereco().getId());
 		usuario.getTelefone().setId(usuarioExistente.get().getTelefone().getId());
 		usuario = cadastroUsuarioService.salvar(usuario);
-		return ResponseEntity.ok(toModel(usuario));
+		return ResponseEntity.ok(mapper.toModel(usuario, UsuarioModel.class));
 	}
 
 	@DeleteMapping("/{usuarioId}")
@@ -91,15 +90,4 @@ public class UsuarioController {
 		return ResponseEntity.noContent().build();
 	}
 	
-	private UsuarioModel toModel(Usuario usuario) {
-		return modelMapper.map(usuario, UsuarioModel.class);
-	}
-
-	private Usuario toEntity(UsuarioInput usuarioInput) {
-		return modelMapper.map(usuarioInput, Usuario.class);
-	}
-
-	private List<UsuarioModel> toCollectionModel(List<Usuario> usuarios) {
-		return usuarios.stream().map(usuario -> toModel(usuario)).collect(Collectors.toList());
-	}
 }

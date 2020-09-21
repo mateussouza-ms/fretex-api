@@ -20,7 +20,7 @@ public class PrestadorServico {
 	@OneToOne(cascade = CascadeType.ALL)
 	private Usuario usuario;
 
-	@OneToMany(mappedBy = "prestadorServico")
+	@OneToMany(cascade = CascadeType.REMOVE, mappedBy = "prestadorServico")
 	private List<Veiculo> veiculos;
 
 	public Long getId() {

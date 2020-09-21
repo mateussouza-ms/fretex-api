@@ -17,39 +17,52 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import br.com.fretex.domain.exception.EntidadeNaoEncontradaException;
 import br.com.fretex.domain.exception.NegocioException;
 
 @ControllerAdvice
-public class ApiExceptionHandler extends ResponseEntityExceptionHandler{
+public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
 	@Autowired
 	private MessageSource messageSource;
-	
+
 	@ExceptionHandler(NegocioException.class)
 	public ResponseEntity<Object> handleNegocio(NegocioException ex, WebRequest request) {
 		var status = HttpStatus.BAD_REQUEST;
-		
+
 		var problema = new Problema();
 		problema.setStatus(status.value());
 		problema.setTitulo(ex.getMessage());
 		problema.setDataHora(OffsetDateTime.now());
-		
+
 		return handleExceptionInternal(ex, problema, new HttpHeaders(), status, request);
 	}
-	
-	
+
+	@ExceptionHandler(EntidadeNaoEncontradaException.class)
+	public ResponseEntity<Object> handleEntidadeNaoEncontradaException(NegocioException ex,
+			WebRequest request) {
+		var status = HttpStatus.NOT_FOUND;
+
+		var problema = new Problema();
+		problema.setStatus(status.value());
+		problema.setTitulo(ex.getMessage());
+		problema.setDataHora(OffsetDateTime.now());
+
+		return handleExceptionInternal(ex, problema, new HttpHeaders(), status, request);
+	}
+
 	@Override
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
 		var campos = new ArrayList<Problema.Campo>();
-		
-		for ( ObjectError error : ex.getBindingResult().getAllErrors()) {
+
+		for (ObjectError error : ex.getBindingResult().getAllErrors()) {
 			String nome = ((FieldError) error).getField();
 			String mensagem = messageSource.getMessage(error, LocaleContextHolder.getLocale());
-			
+
 			campos.add(new Problema.Campo(nome, mensagem));
 		}
-		
+
 		var problema = new Problema();
 		problema.setStatus(status.value());
 		problema.setDataHora(OffsetDateTime.now());
