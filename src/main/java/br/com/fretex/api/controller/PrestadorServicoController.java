@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.fretex.api.model.PrestadorServicoInput;
 import br.com.fretex.api.model.PrestadorServicoModel;
+import br.com.fretex.api.model.input.PrestadorServicoInput;
 import br.com.fretex.api.util.Mapper;
 import br.com.fretex.domain.exception.EntidadeNaoEncontradaException;
 import br.com.fretex.domain.model.PrestadorServico;

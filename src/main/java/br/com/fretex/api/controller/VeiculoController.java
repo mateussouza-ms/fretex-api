@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.fretex.api.model.VeiculoInput;
 import br.com.fretex.api.model.VeiculoModel;
+import br.com.fretex.api.model.input.VeiculoInput;
 import br.com.fretex.api.util.Mapper;
 import br.com.fretex.domain.exception.EntidadeNaoEncontradaException;
 import br.com.fretex.domain.model.PrestadorServico;

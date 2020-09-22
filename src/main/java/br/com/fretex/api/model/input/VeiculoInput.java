@@ -1,4 +1,4 @@
-package br.com.fretex.api.model;
+package br.com.fretex.api.model.input;
 
 import java.math.BigDecimal;
 

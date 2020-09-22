@@ -18,8 +18,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.fretex.api.model.UsuarioInput;
 import br.com.fretex.api.model.UsuarioModel;
+import br.com.fretex.api.model.input.UsuarioInput;
 import br.com.fretex.api.util.Mapper;
 import br.com.fretex.domain.model.Usuario;
 import br.com.fretex.domain.repository.UsuarioRepository;
