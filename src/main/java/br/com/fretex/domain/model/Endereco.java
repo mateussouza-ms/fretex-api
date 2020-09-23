@@ -1,9 +1,12 @@
 package br.com.fretex.domain.model;
 
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 @Entity
@@ -24,6 +27,12 @@ public class Endereco {
 
 	private Double latitude;
 	private Double longitude;
+
+	@OneToMany(mappedBy = "enderecoRetirada")
+	private List<Carga> cargasRetiradas;
+
+	@OneToMany(mappedBy = "enderecoEntrega")
+	private List<Carga> cargasEntregues;
 
 	public Long getId() {
 		return id;
@@ -95,6 +104,22 @@ public class Endereco {
 
 	public void setLongitude(Double longitude) {
 		this.longitude = longitude;
+	}
+
+	public List<Carga> getCargasEntregues() {
+		return cargasEntregues;
+	}
+
+	public void setCargasEntregues(List<Carga> cargasEntregues) {
+		this.cargasEntregues = cargasEntregues;
+	}
+
+	public List<Carga> getCargasRetiradas() {
+		return cargasRetiradas;
+	}
+
+	public void setCargasRetiradas(List<Carga> cargasRetiradas) {
+		this.cargasRetiradas = cargasRetiradas;
 	}
 
 	@Override

@@ -1,14 +1,12 @@
 package br.com.fretex.api.model;
 
-import br.com.fretex.domain.model.Cidade;
-
 public class EnderecoModel {
 	private String cep;
 	private String logradouro;
 	private String numero;
 	private String bairro;
 	private String complemento;
-	private Cidade cidade;
+	private CidadeModel cidade;
 
 	public String getCep() {
 		return cep;
@@ -50,11 +48,11 @@ public class EnderecoModel {
 		this.complemento = complemento;
 	}
 
-	public Cidade getCidade() {
+	public CidadeModel getCidade() {
 		return cidade;
 	}
 
-	public void setCidade(Cidade cidade) {
+	public void setCidade(CidadeModel cidade) {
 		this.cidade = cidade;
 	}
 

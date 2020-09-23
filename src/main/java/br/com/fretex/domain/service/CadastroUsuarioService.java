@@ -1,18 +1,22 @@
 package br.com.fretex.domain.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.fretex.domain.exception.EntidadeNaoEncontradaException;
 import br.com.fretex.domain.exception.NegocioException;
+import br.com.fretex.domain.model.Cidade;
 import br.com.fretex.domain.model.Cliente;
 import br.com.fretex.domain.model.PrestadorServico;
 import br.com.fretex.domain.model.SituacaoUsuario;
 import br.com.fretex.domain.model.TipoPessoa;
 import br.com.fretex.domain.model.Usuario;
 import br.com.fretex.domain.model.Veiculo;
+import br.com.fretex.domain.repository.CidadeRepository;
 import br.com.fretex.domain.repository.ClienteRepository;
 import br.com.fretex.domain.repository.PrestadorServicoRepository;
 import br.com.fretex.domain.repository.UsuarioRepository;
@@ -32,6 +36,9 @@ public class CadastroUsuarioService {
 
 	@Autowired
 	private VeiculoRepository veiculoRepository;
+	
+	@Autowired
+	private CidadeRepository cidadeRepository;
 
 	public Usuario salvar(Usuario usuario) {
 		Usuario usuarioExistente = usuarioRepository.findByCnp(usuario.getCnp());
@@ -63,7 +70,15 @@ public class CadastroUsuarioService {
 		if (usuarioExistente != null && usuarioExistente.getSituacao().equals(SituacaoUsuario.INATIVO)) {
 			throw new NegocioException("O usuário não pode ser atualizado porque está inativo.");
 		}
-
+		
+		Optional<Cidade> cidade = cidadeRepository.findById(usuario.getEndereco().getCidade().getId());
+		
+		if (!cidade.isPresent()) {
+			throw new EntidadeNaoEncontradaException(
+					"Cidade [" + usuario.getEndereco().getCidade().getId() + "] não encontrada");
+		}
+		
+		usuario.getEndereco().setCidade(cidade.get());
 		usuario.setSituacao(SituacaoUsuario.ATIVO);
 
 		return usuarioRepository.save(usuario);

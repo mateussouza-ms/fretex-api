@@ -3,10 +3,19 @@ package br.com.fretex.api.model;
 import java.math.BigDecimal;
 
 public class VeiculoModel {
+	private Long id;
 	private Long prestadorServicoId;
 	private String nome;
 	private BigDecimal pesoMaximo;
 	private String outrasCaracteristicas;
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
 
 	public Long getPrestadorServicoId() {
 		return prestadorServicoId;

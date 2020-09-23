@@ -1,12 +1,14 @@
 package br.com.fretex.domain.model;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 @Entity
 public class Veiculo {
@@ -20,6 +22,9 @@ public class Veiculo {
 	private String nome;
 	private BigDecimal pesoMaximo;
 	private String outrasCaracteristicas;
+	
+	@OneToMany(mappedBy = "veiculo")
+	private List<NegociacaoCarga> negociacoesCargas;
 
 	public long getId() {
 		return id;
@@ -59,6 +64,14 @@ public class Veiculo {
 
 	public void setOutrasCaracteristicas(String outrasCaracteristicas) {
 		this.outrasCaracteristicas = outrasCaracteristicas;
+	}
+
+	public List<NegociacaoCarga> getNegociacoesCargas() {
+		return negociacoesCargas;
+	}
+
+	public void setNegociacoesCargas(List<NegociacaoCarga> negociacoesCargas) {
+		this.negociacoesCargas = negociacoesCargas;
 	}
 
 	@Override
