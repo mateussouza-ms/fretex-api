@@ -1,11 +1,13 @@
 package br.com.fretex.api.controller;
 
+import java.time.OffsetDateTime;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,6 +21,7 @@ import br.com.fretex.api.util.Mapper;
 import br.com.fretex.domain.exception.EntidadeNaoEncontradaException;
 import br.com.fretex.domain.model.Carga;
 import br.com.fretex.domain.model.NegociacaoCarga;
+import br.com.fretex.domain.model.Proposta;
 import br.com.fretex.domain.repository.CargaRepository;
 import br.com.fretex.domain.repository.NegociacaoCargaRepository;
 import br.com.fretex.domain.service.GestaoNegociacaoCargaService;
@@ -42,23 +45,40 @@ public class NegociacaoCargaController {
 	@PostMapping
 	public NegociacaoCargaModel adicionar(@PathVariable Long cargaId,
 			@Valid @RequestBody NegociacaoCargaInput negociacaoCargaInput) {
-		Optional<Carga> carga = cargaRepository.findById(cargaId);
-
-		if (!carga.isPresent()) {
-			throw new EntidadeNaoEncontradaException("Carga [" + cargaId + "] não encontrada.");
-		}
+		Carga carga = cargaRepository.findById(cargaId)
+				.orElseThrow(() -> new EntidadeNaoEncontradaException("Carga [" + cargaId + "] não encontrada."));
 
 		NegociacaoCarga negociacaoCarga = mapper.toEntity(negociacaoCargaInput, NegociacaoCarga.class);
-		negociacaoCarga.setCarga(carga.get());
+		Proposta proposta = mapper.toEntity(negociacaoCargaInput.getProposta(), Proposta.class);
+		proposta.setNegociacaoCarga(negociacaoCarga);
+		proposta.setDataCriacao(OffsetDateTime.now());
+		negociacaoCarga.setCarga(carga);		
+		negociacaoCarga.setPropostas(new ArrayList<Proposta>());		
+		negociacaoCarga.getPropostas().add(proposta);
+		
+		negociacaoCarga = gestaoNegociacaoCargaService.novaNegociacao(negociacaoCarga);
 
-		return mapper.toModel(gestaoNegociacaoCargaService.abrirNegociacao(negociacaoCarga),
-				NegociacaoCargaModel.class);
+		return mapper.toModel(negociacaoCarga, NegociacaoCargaModel.class);
 	}
 
 	@GetMapping
 	public List<NegociacaoCargaModel> listar(@PathVariable Long cargaId) {
+		cargaRepository.findById(cargaId)
+				.orElseThrow(() -> new EntidadeNaoEncontradaException("Carga [" + cargaId + "] não encontrada."));
+
 		List<NegociacaoCarga> negociacoesCarga = negociacaoCargaRepository.findByCargaId(cargaId);
 		return mapper.toCollectionModel(negociacoesCarga, NegociacaoCargaModel.class);
+	}
+	
+	@DeleteMapping("/{negociacaoCargaId}")
+	public void cancelar(@PathVariable Long cargaId, @PathVariable Long negociacaoCargaId) {
+		Carga carga = cargaRepository.findById(cargaId)
+				.orElseThrow(() -> new EntidadeNaoEncontradaException("Carga [" + cargaId + "] não encontrada."));
+		
+		NegociacaoCarga negociacaoCarga = negociacaoCargaRepository.findByIdAndCarga(negociacaoCargaId, carga)
+				.orElseThrow(() -> new EntidadeNaoEncontradaException("Negociação [" + negociacaoCargaId + "] não encontrada."));
+
+		gestaoNegociacaoCargaService.cancelarNegociacao(negociacaoCarga);
 	}
 
 }

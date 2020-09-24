@@ -1,0 +1,1 @@
+insert into parametros_config (limite_propostas) values (null);

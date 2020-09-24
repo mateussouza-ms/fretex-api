@@ -1,14 +1,15 @@
 package br.com.fretex.api.model;
 
 import java.math.BigDecimal;
+import java.time.OffsetDateTime;
 
 public class PropostaModel {
 	private Long id;
 	private BigDecimal valor;
 	private String justificativa;
 	private boolean aceita;
-	private PropostaModel contraproposta;
 	private Long usuarioResponsavelId;
+	private OffsetDateTime dataCriacao;
 
 	public Long getId() {
 		return id;
@@ -42,20 +43,20 @@ public class PropostaModel {
 		this.aceita = aceita;
 	}
 
-	public PropostaModel getContraproposta() {
-		return contraproposta;
-	}
-
-	public void setContraproposta(PropostaModel contraproposta) {
-		this.contraproposta = contraproposta;
-	}
-
 	public Long getUsuarioResponsavelId() {
 		return usuarioResponsavelId;
 	}
 
 	public void setUsuarioResponsavelId(Long usuarioResponsavelId) {
 		this.usuarioResponsavelId = usuarioResponsavelId;
+	}
+
+	public OffsetDateTime getDataCriacao() {
+		return dataCriacao;
+	}
+
+	public void setDataCriacao(OffsetDateTime dataCriacao) {
+		this.dataCriacao = dataCriacao;
 	}
 
 }

@@ -1,14 +1,13 @@
 package br.com.fretex.domain.model;
 
 import java.math.BigDecimal;
+import java.time.OffsetDateTime;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 
 @Entity
 public class Proposta {
@@ -23,13 +22,12 @@ public class Proposta {
 	private BigDecimal valor;
 	private String justificativa;
 
-	@OneToOne(cascade = CascadeType.ALL)
-	private Proposta contraproposta;
-
 	private boolean aceita;
 
 	@ManyToOne
 	private Usuario usuarioResponsavel;
+
+	private OffsetDateTime dataCriacao;
 
 	public Long getId() {
 		return id;
@@ -63,14 +61,6 @@ public class Proposta {
 		this.justificativa = justificativa;
 	}
 
-	public Proposta getContraproposta() {
-		return contraproposta;
-	}
-
-	public void setContraproposta(Proposta contraproposta) {
-		this.contraproposta = contraproposta;
-	}
-
 	public boolean isAceita() {
 		return aceita;
 	}
@@ -85,6 +75,14 @@ public class Proposta {
 
 	public void setUsuarioResponsavel(Usuario usuarioResponsavel) {
 		this.usuarioResponsavel = usuarioResponsavel;
+	}
+
+	public OffsetDateTime getDataCriacao() {
+		return dataCriacao;
+	}
+
+	public void setDataCriacao(OffsetDateTime dataCriacao) {
+		this.dataCriacao = dataCriacao;
 	}
 
 	@Override
