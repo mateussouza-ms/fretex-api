@@ -1,5 +1,6 @@
 package br.com.fretex.domain.service;
 
+import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.fretex.domain.exception.EntidadeNaoEncontradaException;
 import br.com.fretex.domain.exception.NegocioException;
+import br.com.fretex.domain.model.FinalizacaoNegociacao;
 import br.com.fretex.domain.model.NegociacaoCarga;
 import br.com.fretex.domain.model.ParametrosConfig;
 import br.com.fretex.domain.model.Proposta;
@@ -44,7 +46,8 @@ public class GestaoNegociacaoCargaService {
 
 		if (negociacaoCargaRepository.existsByCargaAndStatus(negociacaoCarga.getCarga(),
 				StatusNegocicacao.FINALIZADA_COM_ACORDO)) {
-			throw new NegocioException("A carga [" + negociacaoCarga.getCarga().getId() + "] já possui negociação finalizada com acordo.");
+			throw new NegocioException(
+					"A carga [" + negociacaoCarga.getCarga().getId() + "] já possui negociação finalizada com acordo.");
 		}
 
 		if (!veiculoRepository.existsById(negociacaoCarga.getVeiculo().getId())) {
@@ -91,7 +94,7 @@ public class GestaoNegociacaoCargaService {
 		return propostaRepository.save(contraproposta);
 	}
 
-	public void aceitarProposta(Proposta proposta, Long usuarioId) {
+	public FinalizacaoNegociacao aceitarProposta(Proposta proposta, Long usuarioId) {
 		validarContraproposta(proposta);
 
 		Long negociacaoCargaId = proposta.getNegociacaoCarga().getId();
@@ -118,6 +121,24 @@ public class GestaoNegociacaoCargaService {
 
 		propostaRepository.save(proposta);
 
+		ParametrosConfig parametrosConfig = parametrosConfigRepository.findTopByOrderByIdDesc();
+
+		FinalizacaoNegociacao finalizacaoNegociacao = new FinalizacaoNegociacao();
+		BigDecimal valorAcordado = proposta.getValor();
+		BigDecimal percentualTaxa = parametrosConfig.getPercentualTaxa();
+		BigDecimal valorTaxa = valorAcordado.multiply(percentualTaxa);
+		BigDecimal valorTotal = valorAcordado.add(valorTaxa);
+
+		finalizacaoNegociacao.setValorAcordado(valorAcordado);
+		finalizacaoNegociacao.setPercentualTaxa(percentualTaxa);
+		finalizacaoNegociacao.setValorTaxa(valorTaxa);
+		finalizacaoNegociacao.setValorTotal(valorTotal);
+
+		NegociacaoCarga negociacaoCarga = proposta.getNegociacaoCarga();
+		negociacaoCarga.setFinalizacaoNegociacao(finalizacaoNegociacao);
+		negociacaoCarga = negociacaoCargaRepository.save(negociacaoCarga);
+
+		return negociacaoCarga.getFinalizacaoNegociacao();
 	}
 
 	public void cancelarNegociacao(NegociacaoCarga negociacaoCarga) {
@@ -126,7 +147,7 @@ public class GestaoNegociacaoCargaService {
 		}
 
 		negociacaoCarga.setStatus(StatusNegocicacao.FINALIZADA_SEM_ACORDO);
-		
+
 		negociacaoCargaRepository.save(negociacaoCarga);
 
 	}

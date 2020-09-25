@@ -1,5 +1,7 @@
 package br.com.fretex.domain.model;
 
+import java.math.BigDecimal;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -13,8 +15,10 @@ public class ParametrosConfig {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@NotNull
 	private Integer limitePropostas;
+
+	@NotNull
+	private BigDecimal percentualTaxa;
 
 	public Long getId() {
 		return id;
@@ -30,6 +34,14 @@ public class ParametrosConfig {
 
 	public void setLimitePropostas(Integer limitePropostas) {
 		this.limitePropostas = limitePropostas;
+	}
+
+	public BigDecimal getPercentualTaxa() {
+		return percentualTaxa;
+	}
+
+	public void setPercentualTaxa(BigDecimal percentualTaxa) {
+		this.percentualTaxa = percentualTaxa;
 	}
 
 }

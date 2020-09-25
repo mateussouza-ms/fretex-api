@@ -11,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 @Entity
 public class NegociacaoCarga {
@@ -25,11 +26,14 @@ public class NegociacaoCarga {
 	@ManyToOne
 	private Veiculo veiculo;
 
-	@OneToMany(mappedBy = "negociacaoCarga", cascade = CascadeType.ALL)
-	private List<Proposta> propostas;
-
 	@Enumerated(EnumType.STRING)
 	private StatusNegocicacao status;
+
+	@OneToOne(cascade = CascadeType.ALL)
+	private FinalizacaoNegociacao finalizacaoNegociacao;
+
+	@OneToMany(mappedBy = "negociacaoCarga", cascade = CascadeType.ALL)
+	private List<Proposta> propostas;
 
 	public Long getId() {
 		return id;
@@ -55,20 +59,28 @@ public class NegociacaoCarga {
 		this.veiculo = veiculo;
 	}
 
-	public List<Proposta> getPropostas() {
-		return propostas;
-	}
-
-	public void setPropostas(List<Proposta> propostas) {
-		this.propostas = propostas;
-	}
-
 	public StatusNegocicacao getStatus() {
 		return status;
 	}
 
 	public void setStatus(StatusNegocicacao status) {
 		this.status = status;
+	}
+
+	public FinalizacaoNegociacao getFinalizacaoNegociacao() {
+		return finalizacaoNegociacao;
+	}
+
+	public void setFinalizacaoNegociacao(FinalizacaoNegociacao finalizacaoNegociacao) {
+		this.finalizacaoNegociacao = finalizacaoNegociacao;
+	}
+
+	public List<Proposta> getPropostas() {
+		return propostas;
+	}
+
+	public void setPropostas(List<Proposta> propostas) {
+		this.propostas = propostas;
 	}
 
 	@Override

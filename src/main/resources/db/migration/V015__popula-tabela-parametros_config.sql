@@ -1,1 +1,1 @@
-insert into parametros_config (limite_propostas) values (null);
+insert into parametros_config (limite_propostas, percentual_taxa) values (null, 0.1);

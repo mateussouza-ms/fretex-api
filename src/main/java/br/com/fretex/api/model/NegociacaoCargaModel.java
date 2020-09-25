@@ -6,8 +6,10 @@ import br.com.fretex.domain.model.StatusNegocicacao;
 
 public class NegociacaoCargaModel {
 	private Long id;
+	private Long cargaId;
 	private VeiculoModel veiculo;
 	private StatusNegocicacao status;
+	private FinalizacaoNegociacaoModel finalizacaoNegociacao;
 	private List<PropostaModel> propostas;
 
 	public Long getId() {
@@ -16,6 +18,14 @@ public class NegociacaoCargaModel {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public Long getCargaId() {
+		return cargaId;
+	}
+
+	public void setCargaId(Long cargaId) {
+		this.cargaId = cargaId;
 	}
 
 	public VeiculoModel getVeiculo() {
@@ -32,6 +42,14 @@ public class NegociacaoCargaModel {
 
 	public void setStatus(StatusNegocicacao status) {
 		this.status = status;
+	}
+
+	public FinalizacaoNegociacaoModel getFinalizacaoNegociacao() {
+		return finalizacaoNegociacao;
+	}
+
+	public void setFinalizacaoNegociacao(FinalizacaoNegociacaoModel finalizacaoNegociacao) {
+		this.finalizacaoNegociacao = finalizacaoNegociacao;
 	}
 
 	public List<PropostaModel> getPropostas() {
