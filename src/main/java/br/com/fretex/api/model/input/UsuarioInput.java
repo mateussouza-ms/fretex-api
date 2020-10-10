@@ -29,7 +29,6 @@ public class UsuarioInput {
 	@NotNull
 	private TipoPessoa tipoPessoa;
 
-	@NotNull
 	@Temporal(TemporalType.DATE)
 	private LocalDate dataNascimento;
 
@@ -38,7 +37,6 @@ public class UsuarioInput {
 	private String email;
 
 	@Valid
-	@NotNull
 	private EnderecoInput endereco;
 
 	@Valid

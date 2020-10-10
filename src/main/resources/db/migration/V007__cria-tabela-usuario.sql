@@ -5,12 +5,12 @@ CREATE TABLE usuario
 	nome_fantasia varchar(120),
 	cnp varchar(14) not null,
 	tipo_pessoa varchar(10) not null,
-	data_nascimento date not null,
+	data_nascimento date,
 	email varchar(50) not null,
-	endereco_id bigint not null,
+	endereco_id bigint,
 	telefone_id bigint not null,
 	senha varchar(120) not null,
-	situacao varchar(7) not null,   	
+	situacao varchar(7) not null,  	
 	
     PRIMARY KEY (id),
     

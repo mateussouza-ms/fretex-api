@@ -25,7 +25,6 @@ public class Telefone {
 	@Size(min = 8, max = 9)
 	private String numero;
 
-	@NotNull
 	@Enumerated(EnumType.STRING)
 	private TipoTelefone tipo;
 

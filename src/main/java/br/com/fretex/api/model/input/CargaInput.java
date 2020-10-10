@@ -29,7 +29,6 @@ public class CargaInput {
 	@NotNull
 	private EnderecoInput enderecoEntrega;
 
-	@NotBlank
 	@Size(max = 120)
 	private String observacoes;
 

@@ -36,7 +36,7 @@ public class CadastroUsuarioService {
 
 	@Autowired
 	private VeiculoRepository veiculoRepository;
-	
+
 	@Autowired
 	private CidadeRepository cidadeRepository;
 
@@ -70,15 +70,18 @@ public class CadastroUsuarioService {
 		if (usuarioExistente != null && usuarioExistente.getSituacao().equals(SituacaoUsuario.INATIVO)) {
 			throw new NegocioException("O usuário não pode ser atualizado porque está inativo.");
 		}
-		
-		Optional<Cidade> cidade = cidadeRepository.findById(usuario.getEndereco().getCidade().getId());
-		
-		if (!cidade.isPresent()) {
-			throw new EntidadeNaoEncontradaException(
-					"Cidade [" + usuario.getEndereco().getCidade().getId() + "] não encontrada");
+
+		if (usuario.getEndereco() != null) {
+			Optional<Cidade> cidade = cidadeRepository.findById(usuario.getEndereco().getCidade().getId());
+
+			if (!cidade.isPresent()) {
+				throw new EntidadeNaoEncontradaException(
+						"Cidade [" + usuario.getEndereco().getCidade().getId() + "] não encontrada");
+			}
+
+			usuario.getEndereco().setCidade(cidade.get());
 		}
 		
-		usuario.getEndereco().setCidade(cidade.get());
 		usuario.setSituacao(SituacaoUsuario.ATIVO);
 
 		return usuarioRepository.save(usuario);
