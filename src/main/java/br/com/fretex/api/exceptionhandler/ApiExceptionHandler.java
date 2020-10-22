@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
@@ -67,6 +68,23 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		problema.setStatus(status.value());
 		problema.setDataHora(OffsetDateTime.now());
 		problema.setTitulo("Um ou mais campos estão inválidos. Faça o preenchimento correto e tente novamente.");
+		problema.setCampos(campos);
+
+		return super.handleExceptionInternal(ex, problema, headers, status, request);
+	}
+	
+	@Override
+	protected ResponseEntity<Object> handleMissingServletRequestParameter(MissingServletRequestParameterException ex,
+			HttpHeaders headers, HttpStatus status, WebRequest request) {
+		var campos = new ArrayList<Problema.Campo>();
+
+			campos.add(new Problema.Campo(ex.getParameterName(), "é obrigatório"));
+
+
+		var problema = new Problema();
+		problema.setStatus(status.value());
+		problema.setDataHora(OffsetDateTime.now());
+		problema.setTitulo("Parâmetro ausente");
 		problema.setCampos(campos);
 
 		return super.handleExceptionInternal(ex, problema, headers, status, request);

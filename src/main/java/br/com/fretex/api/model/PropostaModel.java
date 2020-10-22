@@ -7,8 +7,9 @@ public class PropostaModel {
 	private Long id;
 	private BigDecimal valor;
 	private String justificativa;
-	private boolean aceita;
-	private Long usuarioResponsavelId;
+	
+	private Boolean aceita;
+	private UsuarioResumoModel usuarioResponsavel;
 	private OffsetDateTime dataCriacao;
 
 	public Long getId() {
@@ -35,20 +36,20 @@ public class PropostaModel {
 		this.justificativa = justificativa;
 	}
 
-	public boolean isAceita() {
+	public Boolean isAceita() {
 		return aceita;
 	}
 
-	public void setAceita(boolean aceita) {
+	public void setAceita(Boolean aceita) {
 		this.aceita = aceita;
 	}
 
-	public Long getUsuarioResponsavelId() {
-		return usuarioResponsavelId;
+	public UsuarioResumoModel getUsuarioResponsavel() {
+		return usuarioResponsavel;
 	}
 
-	public void setUsuarioResponsavelId(Long usuarioResponsavelId) {
-		this.usuarioResponsavelId = usuarioResponsavelId;
+	public void setUsuarioResponsavel(UsuarioResumoModel usuarioResponsavel) {
+		this.usuarioResponsavel = usuarioResponsavel;
 	}
 
 	public OffsetDateTime getDataCriacao() {

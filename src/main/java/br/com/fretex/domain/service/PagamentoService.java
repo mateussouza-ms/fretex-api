@@ -21,6 +21,10 @@ public class PagamentoService {
 
 		FinalizacaoNegociacao finalizacaoNegociacao = pagamento.getFinalizacaoNegociacao();
 
+		if (!finalizacaoNegociacao.permitePagamento()) {
+			throw new NegocioException("A negociação já está totalmente paga.");			
+		}
+		
 		if (!pagamento.getValorPago().equals(finalizacaoNegociacao.getValorTotal())) {
 			throw new NegocioException("Valor do pagamento está diferente do valor total a ser pago.");
 		}

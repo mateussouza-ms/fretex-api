@@ -14,4 +14,6 @@ public interface PrestadorServicoRepository extends JpaRepository<PrestadorServi
 	public boolean existsByUsuario(Usuario usuario);
 
 	public Optional<PrestadorServico> findByUsuario(Usuario usuario);
+
+	public Optional<PrestadorServico> findByUsuarioId(Long usuarioId);
 }

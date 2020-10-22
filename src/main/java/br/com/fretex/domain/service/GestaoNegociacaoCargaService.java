@@ -91,11 +91,14 @@ public class GestaoNegociacaoCargaService {
 
 		contraproposta.setDataCriacao(OffsetDateTime.now());
 
+		ultimaProposta.setAceita(false);
+		propostaRepository.save(ultimaProposta);
+		
 		return propostaRepository.save(contraproposta);
 	}
 
 	public FinalizacaoNegociacao aceitarProposta(Proposta proposta, Long usuarioId) {
-		validarContraproposta(proposta);
+		//validarContraproposta(proposta);
 
 		Long negociacaoCargaId = proposta.getNegociacaoCarga().getId();
 

@@ -22,7 +22,7 @@ public class Proposta {
 	private BigDecimal valor;
 	private String justificativa;
 
-	private boolean aceita;
+	private Boolean aceita;
 
 	@ManyToOne
 	private Usuario usuarioResponsavel;
@@ -61,11 +61,11 @@ public class Proposta {
 		this.justificativa = justificativa;
 	}
 
-	public boolean isAceita() {
+	public Boolean isAceita() {
 		return aceita;
 	}
 
-	public void setAceita(boolean aceita) {
+	public void setAceita(Boolean aceita) {
 		this.aceita = aceita;
 	}
 

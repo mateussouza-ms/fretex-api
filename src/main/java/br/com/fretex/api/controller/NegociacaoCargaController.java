@@ -3,10 +3,12 @@ package br.com.fretex.api.controller;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.fretex.api.model.CargaModel;
 import br.com.fretex.api.model.NegociacaoCargaModel;
 import br.com.fretex.api.model.input.NegociacaoCargaInput;
 import br.com.fretex.api.util.Mapper;
@@ -43,7 +46,7 @@ public class NegociacaoCargaController {
 	private Mapper mapper;
 
 	@PostMapping
-	public NegociacaoCargaModel adicionar(@PathVariable Long cargaId,
+	public CargaModel adicionar(@PathVariable Long cargaId,
 			@Valid @RequestBody NegociacaoCargaInput negociacaoCargaInput) {
 		Carga carga = cargaRepository.findById(cargaId)
 				.orElseThrow(() -> new EntidadeNaoEncontradaException("Carga [" + cargaId + "] não encontrada."));
@@ -58,7 +61,9 @@ public class NegociacaoCargaController {
 		
 		negociacaoCarga = gestaoNegociacaoCargaService.novaNegociacao(negociacaoCarga);
 
-		return mapper.toModel(negociacaoCarga, NegociacaoCargaModel.class);
+		carga = negociacaoCarga.getCarga();
+		
+		return mapper.toModel(carga, CargaModel.class);
 	}
 
 	@GetMapping
@@ -68,6 +73,17 @@ public class NegociacaoCargaController {
 
 		List<NegociacaoCarga> negociacoesCarga = negociacaoCargaRepository.findByCargaId(cargaId);
 		return mapper.toCollectionModel(negociacoesCarga, NegociacaoCargaModel.class);
+	}
+	
+	@GetMapping("/{negociacaoCargaId}")
+	public ResponseEntity<NegociacaoCargaModel> buscar(@PathVariable Long negociacaoCargaId) {
+		Optional<NegociacaoCarga> negociacaoCarga = negociacaoCargaRepository.findById(negociacaoCargaId);
+
+		if (!negociacaoCarga.isPresent()) {
+			return ResponseEntity.notFound().build();
+		}
+
+		return ResponseEntity.ok(mapper.toModel(negociacaoCarga.get(), NegociacaoCargaModel.class));
 	}
 	
 	@DeleteMapping("/{negociacaoCargaId}")

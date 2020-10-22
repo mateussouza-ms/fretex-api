@@ -3,15 +3,19 @@ package br.com.fretex.api.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.fretex.api.model.CargaModel;
 import br.com.fretex.api.model.input.CargaInput;
 import br.com.fretex.api.util.Mapper;
+import br.com.fretex.domain.exception.EntidadeNaoEncontradaException;
 import br.com.fretex.domain.model.Carga;
 import br.com.fretex.domain.repository.CargaRepository;
 import br.com.fretex.domain.service.GestaoCargasService;
@@ -21,10 +25,10 @@ import br.com.fretex.domain.service.GestaoCargasService;
 public class CargaController {
 
 	@Autowired
-	private CargaRepository cargaRepository;
-
-	@Autowired
 	private GestaoCargasService gestaoCargasService;
+	
+	@Autowired
+	private CargaRepository cargaRepository;
 
 	@Autowired
 	private Mapper mapper;
@@ -35,8 +39,19 @@ public class CargaController {
 	}
 
 	@GetMapping
-	public List<CargaModel> listar() {
-		return mapper.toCollectionModel(cargaRepository.findAll(), CargaModel.class);
+	public List<CargaModel> listarComFiltro(@Nullable @RequestParam String situacao, @RequestParam Long usuarioId,
+			@RequestParam String usuarioPerfil) {
+
+		return mapper.toCollectionModel(gestaoCargasService.listarComFiltro(situacao, usuarioId, usuarioPerfil),
+				CargaModel.class);
+	}
+	
+	@GetMapping("/{cargaId}")
+	public CargaModel buscar(@PathVariable Long cargaId) {
+		Carga carga = cargaRepository.findById(cargaId)
+				.orElseThrow(() -> new EntidadeNaoEncontradaException("Carga [" + cargaId + "] não encontrada"));
+		
+		return mapper.toModel(carga, CargaModel.class);
 	}
 
 }

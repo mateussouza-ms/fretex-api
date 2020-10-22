@@ -3,8 +3,17 @@ package br.com.fretex.api.model;
 import java.util.List;
 
 public class PrestadorServicoModel {
+	private Long id;
 	private Long usuarioId;
 	private List<VeiculoModel> veiculos;
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
 
 	public Long getUsuarioId() {
 		return usuarioId;

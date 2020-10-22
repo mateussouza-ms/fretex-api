@@ -37,6 +37,20 @@ public class FinalizacaoNegociacao {
 	@OneToMany(mappedBy = "finalizacaoNegociacao")
 	private List<Pagamento> pagamentos;
 
+	public boolean permitePagamento() {
+		BigDecimal totalJaPago = BigDecimal.ZERO;
+		
+		for (Pagamento pagamento : pagamentos) {
+			if(pagamento.getStatus().equals(StatusPagamento.AGUARDANDO_APROVACAO)
+					|| pagamento.getStatus().equals(StatusPagamento.APROVADO)) {
+				totalJaPago = totalJaPago.add(pagamento.getValorPago());
+				
+			}
+		}
+		
+		return totalJaPago.compareTo(getValorTotal()) == -1;
+	}
+	
 	public Long getId() {
 		return id;
 	}

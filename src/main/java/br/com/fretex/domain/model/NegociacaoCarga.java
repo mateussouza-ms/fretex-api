@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.OrderBy;
 
 @Entity
 public class NegociacaoCarga {
@@ -33,6 +34,7 @@ public class NegociacaoCarga {
 	private FinalizacaoNegociacao finalizacaoNegociacao;
 
 	@OneToMany(mappedBy = "negociacaoCarga", cascade = CascadeType.ALL)
+	@OrderBy("id ASC")
 	private List<Proposta> propostas;
 
 	public Long getId() {

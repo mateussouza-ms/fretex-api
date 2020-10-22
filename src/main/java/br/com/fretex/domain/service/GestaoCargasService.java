@@ -1,6 +1,8 @@
 package br.com.fretex.domain.service;
 
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,9 +11,13 @@ import org.springframework.stereotype.Service;
 import br.com.fretex.domain.exception.EntidadeNaoEncontradaException;
 import br.com.fretex.domain.model.Carga;
 import br.com.fretex.domain.model.Cidade;
+import br.com.fretex.domain.model.Cliente;
+import br.com.fretex.domain.model.PrestadorServico;
+import br.com.fretex.domain.model.StatusNegocicacao;
 import br.com.fretex.domain.repository.CargaRepository;
 import br.com.fretex.domain.repository.CidadeRepository;
 import br.com.fretex.domain.repository.ClienteRepository;
+import br.com.fretex.domain.repository.PrestadorServicoRepository;
 
 @Service
 public class GestaoCargasService {
@@ -21,6 +27,9 @@ public class GestaoCargasService {
 
 	@Autowired
 	private ClienteRepository clienteRepository;
+	
+	@Autowired
+	private PrestadorServicoRepository prestadorServicoRepository;
 
 	@Autowired
 	private CidadeRepository cidadeRepository;
@@ -51,4 +60,76 @@ public class GestaoCargasService {
 		return cargaRepository.save(carga);
 	}
 
+	public List<Carga> listarComFiltro(String situacao, Long usuarioId, String usuarioPerfil) {
+
+		if (usuarioPerfil.equals("CLIENTE")) {
+			Cliente cliente = clienteRepository.findByUsuarioId(usuarioId)
+					.orElseThrow(() -> new EntidadeNaoEncontradaException(
+							"O usuário [" + usuarioId + "] não posssui o perfil [" + usuarioPerfil + "]"));
+
+			if (situacao != null && situacao.equals("cadastradas")) {
+				return cargaRepository.findByNegociacoesIsNullAndCliente(cliente);
+			}
+
+			if (situacao != null && situacao.equals("em-negociacao")) {
+				return cargaRepository.findByNegociacoesStatusAndCliente(StatusNegocicacao.ABERTA, cliente);
+			}
+
+			if (situacao != null && situacao.equals("aguardando-retirada")) {
+				return cargaRepository.findByDataRetiradaIsNullAndNegociacoesStatusAndCliente(
+						StatusNegocicacao.FINALIZADA_COM_ACORDO, cliente);
+			}
+
+			if (situacao != null && situacao.equals("em-transporte")) {
+				return cargaRepository.findByDataEntregaIsNullAndDataRetiradaBeforeAndNegociacoesStatusAndCliente(
+						OffsetDateTime.now(), StatusNegocicacao.FINALIZADA_COM_ACORDO, cliente);
+			}
+
+			if (situacao != null && situacao.equals("entregues")) {
+				return cargaRepository.findByDataEntregaBeforeAndNegociacoesStatusAndCliente(OffsetDateTime.now(),
+						StatusNegocicacao.FINALIZADA_COM_ACORDO, cliente);
+			}
+			
+			if (situacao != null && situacao.equals("finalizadas-sem-acordo")) {
+				return cargaRepository.listarFinalizadasSemAcordoCliente(cliente);
+			}
+		}
+
+		if (usuarioPerfil.equals("PRESTADOR_SERVICOS")) {
+			
+			PrestadorServico prestadorServico = prestadorServicoRepository.findByUsuarioId(usuarioId)
+					.orElseThrow(() -> new EntidadeNaoEncontradaException(
+							"O usuário [" + usuarioId + "] não posssui o perfil [" + usuarioPerfil + "]"));
+			
+			if (situacao != null && situacao.equals("cadastradas")) {
+				return cargaRepository.findByNegociacoesIsNullOrNegociacoesStatus(StatusNegocicacao.ABERTA);
+			}
+
+			if (situacao != null && situacao.equals("em-negociacao")) {
+				return cargaRepository.findByNegociacoesStatusAndNegociacoesVeiculoPrestadorServico(StatusNegocicacao.ABERTA, prestadorServico);
+			}
+
+			if (situacao != null && situacao.equals("aguardando-retirada")) {
+				return cargaRepository
+						.findByDataRetiradaIsNullAndNegociacoesStatusAndNegociacoesVeiculoPrestadorServico(StatusNegocicacao.FINALIZADA_COM_ACORDO, prestadorServico);
+			}
+
+			if (situacao != null && situacao.equals("em-transporte")) {
+				return cargaRepository.findByDataEntregaIsNullAndDataRetiradaBeforeAndNegociacoesStatusAndNegociacoesVeiculoPrestadorServico(
+						OffsetDateTime.now(), StatusNegocicacao.FINALIZADA_COM_ACORDO, prestadorServico);
+			}
+
+			if (situacao != null && situacao.equals("entregues")) {
+				return cargaRepository.findByDataEntregaBeforeAndNegociacoesStatusAndNegociacoesVeiculoPrestadorServico(OffsetDateTime.now(),
+						StatusNegocicacao.FINALIZADA_COM_ACORDO, prestadorServico);
+			}
+			
+			if (situacao != null && situacao.equals("finalizadas-sem-acordo")) {
+				return cargaRepository.findByNegociacoesStatusAndNegociacoesVeiculoPrestadorServico(StatusNegocicacao.FINALIZADA_SEM_ACORDO, prestadorServico);
+			}
+
+		}
+		return new ArrayList<Carga>();
+
+	}
 }
