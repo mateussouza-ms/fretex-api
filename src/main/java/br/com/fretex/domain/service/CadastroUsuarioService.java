@@ -41,7 +41,7 @@ public class CadastroUsuarioService {
 	private CidadeRepository cidadeRepository;
 
 	public Usuario salvar(Usuario usuario) {
-		Usuario usuarioExistente = usuarioRepository.findByCnp(usuario.getCnp());
+		Usuario usuarioExistente = usuarioRepository.findByCnp(usuario.getCnp()).get();
 
 		if (usuario.getTipoPessoa().equals(TipoPessoa.FÍSICA)) {
 			if (usuario.getCnp().length() != 11) {
@@ -61,7 +61,7 @@ public class CadastroUsuarioService {
 			}
 		}
 
-		usuarioExistente = usuarioRepository.findByEmail(usuario.getEmail());
+		usuarioExistente = usuarioRepository.findByEmail(usuario.getEmail()).get();
 
 		if (usuarioExistente != null && !usuarioExistente.equals(usuario)) {
 			throw new NegocioException("Já existe usuário cadastrado com o e-mail informado.");
