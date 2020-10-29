@@ -102,7 +102,7 @@ public class GestaoCargasService {
 							"O usuário [" + usuarioId + "] não posssui o perfil [" + usuarioPerfil + "]"));
 			
 			if (situacao != null && situacao.equals("cadastradas")) {
-				return cargaRepository.findByNegociacoesIsNullOrNegociacoesStatus(StatusNegocicacao.ABERTA);
+				return cargaRepository.findByNegociacoesIsNullOrNegociacoesStatusAndNegociacoesVeiculoPrestadorServicoNot(StatusNegocicacao.ABERTA, prestadorServico);
 			}
 
 			if (situacao != null && situacao.equals("em-negociacao")) {

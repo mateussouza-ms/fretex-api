@@ -30,7 +30,7 @@ public interface CargaRepository extends JpaRepository<Carga, Long> {
 			StatusNegocicacao statusNegocicacao, Cliente cliente);
 	
 	
-	public List<Carga> findByNegociacoesIsNullOrNegociacoesStatus(StatusNegocicacao status);
+	public List<Carga> findByNegociacoesIsNullOrNegociacoesStatusAndNegociacoesVeiculoPrestadorServicoNot(StatusNegocicacao status, PrestadorServico prestadorServico);
 
 	public List<Carga> findByNegociacoesStatusAndNegociacoesVeiculoPrestadorServico(StatusNegocicacao statusNegocicacao, PrestadorServico prestadorServico);
 

@@ -41,33 +41,36 @@ public class CadastroUsuarioService {
 	private CidadeRepository cidadeRepository;
 
 	public Usuario salvar(Usuario usuario) {
-		Usuario usuarioExistente = usuarioRepository.findByCnp(usuario.getCnp()).get();
 
 		if (usuario.getTipoPessoa().equals(TipoPessoa.FÍSICA)) {
 			if (usuario.getCnp().length() != 11) {
 				throw new NegocioException("CPF inválido. Deve conter 11 caracteres.");
 			}
 
-			if (usuarioExistente != null && !usuarioExistente.equals(usuario)) {
+			Optional<Usuario> usuarioExistente = usuarioRepository.findByCnp(usuario.getCnp());
+
+			if (usuarioExistente.isPresent() && !usuarioExistente.get().equals(usuario)) {
 				throw new NegocioException("Já existe usuário cadastrado com o CPF informado.");
 			}
 		} else {
 			if (usuario.getCnp().length() != 14) {
 				throw new NegocioException("CNPJ inválido. Deve conter 14 caracteres.");
 			}
-
-			if (usuarioExistente != null && !usuarioExistente.equals(usuario)) {
+			
+			Optional<Usuario> usuarioExistente = usuarioRepository.findByCnp(usuario.getCnp());
+			
+			if (usuarioExistente.isPresent() && !usuarioExistente.get().equals(usuario)) {
 				throw new NegocioException("Já existe usuário cadastrado com o CNPJ informado.");
 			}
 		}
 
-		usuarioExistente = usuarioRepository.findByEmail(usuario.getEmail()).get();
+		Optional<Usuario> usuarioExistente = usuarioRepository.findByEmail(usuario.getEmail());
 
-		if (usuarioExistente != null && !usuarioExistente.equals(usuario)) {
+		if (usuarioExistente.isPresent() && !usuarioExistente.get().equals(usuario)) {
 			throw new NegocioException("Já existe usuário cadastrado com o e-mail informado.");
 		}
 
-		if (usuarioExistente != null && usuarioExistente.getSituacao().equals(SituacaoUsuario.INATIVO)) {
+		if (usuarioExistente.isPresent() && usuarioExistente.get().getSituacao().equals(SituacaoUsuario.INATIVO)) {
 			throw new NegocioException("O usuário não pode ser atualizado porque está inativo.");
 		}
 
@@ -81,7 +84,7 @@ public class CadastroUsuarioService {
 
 			usuario.getEndereco().setCidade(cidade.get());
 		}
-		
+
 		usuario.setSituacao(SituacaoUsuario.ATIVO);
 
 		return usuarioRepository.save(usuario);

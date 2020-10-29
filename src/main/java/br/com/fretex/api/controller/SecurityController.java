@@ -1,20 +1,19 @@
 package br.com.fretex.api.controller;
 
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import br.com.fretex.config.AuthUser;
 
-@RestController
-@RequestMapping("/user-auth")
+@Controller
 public class SecurityController {
 
-    @GetMapping
-    public AuthUser user() {
-        return (AuthUser) SecurityContextHolder.getContext()
-                .getAuthentication()
-                .getPrincipal();
-    }
+	@RequestMapping(value = "/user-auth", method = RequestMethod.GET)
+	@ResponseBody
+	public AuthUser user() {
+		return (AuthUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+	}
 }
