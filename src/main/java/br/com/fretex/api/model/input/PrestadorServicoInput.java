@@ -1,7 +1,5 @@
 package br.com.fretex.api.model.input;
 
-import java.util.List;
-
 import javax.validation.Valid;
 
 import com.sun.istack.NotNull;
@@ -10,14 +8,14 @@ public class PrestadorServicoInput {
 	
 	@Valid
 	@NotNull
-	private List<VeiculoInput> veiculos;
+	private VeiculoInput veiculo;
 
-	public List<VeiculoInput> getVeiculos() {
-		return veiculos;
+	public VeiculoInput getVeiculo() {
+		return veiculo;
 	}
 
-	public void setVeiculos(List<VeiculoInput> veiculos) {
-		this.veiculos = veiculos;
+	public void setVeiculo(VeiculoInput veiculo) {
+		this.veiculo = veiculo;
 	}
 
 }

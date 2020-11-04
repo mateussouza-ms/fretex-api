@@ -1,17 +1,16 @@
 package br.com.fretex.domain.model;
 
-import java.util.List;
+import java.time.OffsetDateTime;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 @Entity
-public class PrestadorServico {
+public class RecuperacaoSenha {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,8 +19,13 @@ public class PrestadorServico {
 	@OneToOne(cascade = CascadeType.ALL)
 	private Usuario usuario;
 
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "prestadorServico")
-	private List<Veiculo> veiculos;
+	private String codigo;
+	private OffsetDateTime validade;
+	private boolean utilizado;
+	
+	public boolean codigoValido() {
+		return getValidade().isAfter(OffsetDateTime.now()) && !utilizado;
+	}
 
 	public Long getId() {
 		return id;
@@ -39,12 +43,28 @@ public class PrestadorServico {
 		this.usuario = usuario;
 	}
 
-	public List<Veiculo> getVeiculos() {
-		return veiculos;
+	public String getCodigo() {
+		return codigo;
 	}
 
-	public void setVeiculos(List<Veiculo> veiculos) {
-		this.veiculos = veiculos;
+	public void setCodigo(String codigo) {
+		this.codigo = codigo;
+	}
+
+	public OffsetDateTime getValidade() {
+		return validade;
+	}
+
+	public void setValidade(OffsetDateTime validade) {
+		this.validade = validade;
+	}
+
+	public boolean isUtilizado() {
+		return utilizado;
+	}
+
+	public void setUtilizado(boolean utilizado) {
+		this.utilizado = utilizado;
 	}
 
 	@Override
@@ -63,7 +83,7 @@ public class PrestadorServico {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		PrestadorServico other = (PrestadorServico) obj;
+		RecuperacaoSenha other = (RecuperacaoSenha) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;

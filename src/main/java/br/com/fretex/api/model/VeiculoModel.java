@@ -6,6 +6,7 @@ public class VeiculoModel {
 	private Long id;
 	private Long prestadorServicoId;
 	private String nome;
+	private String placa;
 	private BigDecimal pesoMaximo;
 	private String outrasCaracteristicas;
 
@@ -31,6 +32,14 @@ public class VeiculoModel {
 
 	public void setNome(String nome) {
 		this.nome = nome;
+	}
+
+	public String getPlaca() {
+		return placa;
+	}
+
+	public void setPlaca(String placa) {
+		this.placa = placa;
 	}
 
 	public BigDecimal getPesoMaximo() {

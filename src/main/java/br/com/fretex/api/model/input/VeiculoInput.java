@@ -9,9 +9,12 @@ import javax.validation.constraints.Size;
 
 public class VeiculoInput {
 
-	@NotBlank
-	@Size(max = 30)
+	@NotNull
 	private String nome;
+
+	@NotBlank
+	@Size(min = 7, max = 7)
+	private String placa;
 
 	@NotNull
 	@Min(0)
@@ -25,6 +28,14 @@ public class VeiculoInput {
 
 	public void setNome(String nome) {
 		this.nome = nome;
+	}
+
+	public String getPlaca() {
+		return placa;
+	}
+
+	public void setPlaca(String placa) {
+		this.placa = placa;
 	}
 
 	public BigDecimal getPesoMaximo() {

@@ -45,7 +45,9 @@ public class OAuth2ServerConfiguration {
                     .invalidateHttpSession(true)
                     .clearAuthentication(true)
                     .and().authorizeRequests()
-                    .antMatchers(HttpMethod.POST, "/usuarios").permitAll()
+                    .antMatchers(HttpMethod.POST, "/usuarios").permitAll()       
+                    .antMatchers(HttpMethod.POST, "/usuarios/recuperacao-senha").permitAll()       
+                    .antMatchers(HttpMethod.POST, "/usuarios/redefinicao-senha").permitAll()       
                     .anyRequest().fullyAuthenticated();
         }
 

@@ -1,5 +1,6 @@
 package br.com.fretex.api.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -17,6 +18,7 @@ import br.com.fretex.api.util.Mapper;
 import br.com.fretex.domain.exception.EntidadeNaoEncontradaException;
 import br.com.fretex.domain.model.PrestadorServico;
 import br.com.fretex.domain.model.Usuario;
+import br.com.fretex.domain.model.Veiculo;
 import br.com.fretex.domain.repository.PrestadorServicoRepository;
 import br.com.fretex.domain.repository.UsuarioRepository;
 import br.com.fretex.domain.service.CadastroUsuarioService;
@@ -44,6 +46,12 @@ public class PrestadorServicoController {
 		PrestadorServico prestadorServico = mapper.toEntity(prestadorServicoInput, PrestadorServico.class);
 		
 		prestadorServico.setUsuario(usuario);
+		
+		List<Veiculo> veiculos = new ArrayList<Veiculo>();
+		Veiculo veiculo = mapper.toEntity(prestadorServicoInput.getVeiculo(),  Veiculo.class);
+		veiculo.setPrestadorServico(prestadorServico);
+		veiculos.add(veiculo);
+		prestadorServico.setVeiculos(veiculos);
 		
 		prestadorServico = (PrestadorServico) cadastroUsuarioService.adicionarPerfil(prestadorServico);
 		

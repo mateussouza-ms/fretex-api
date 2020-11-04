@@ -1,8 +1,6 @@
 package br.com.fretex.domain.service;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -56,9 +54,9 @@ public class CadastroUsuarioService {
 			if (usuario.getCnp().length() != 14) {
 				throw new NegocioException("CNPJ inválido. Deve conter 14 caracteres.");
 			}
-			
+
 			Optional<Usuario> usuarioExistente = usuarioRepository.findByCnp(usuario.getCnp());
-			
+
 			if (usuarioExistente.isPresent() && !usuarioExistente.get().equals(usuario)) {
 				throw new NegocioException("Já existe usuário cadastrado com o CNPJ informado.");
 			}
@@ -116,10 +114,6 @@ public class CadastroUsuarioService {
 
 			var prestadorServico = (PrestadorServico) perfil;
 
-			System.out.println(
-					"getOutrasCaracteristicas: " + prestadorServico.getVeiculos().get(0).getOutrasCaracteristicas());
-			System.out.println("getPrestadorServico: " + prestadorServico.getVeiculos().get(0).getPrestadorServico());
-
 			if (!prestadorServico.getUsuario().getSituacao().equals(SituacaoUsuario.ATIVO)) {
 				throw new NegocioException("Usuário não está ativo. Não permitido o cadastro de novo perfil.");
 			}
@@ -130,7 +124,7 @@ public class CadastroUsuarioService {
 
 			prestadorServico = prestadorServicoRepository.save(prestadorServico);
 
-			prestadorServico.setVeiculos(adicionarVeiculos(prestadorServico, prestadorServico.getVeiculos()));
+			//prestadorServico.setVeiculos(adicionarVeiculos(prestadorServico, prestadorServico.getVeiculos()));
 
 			return prestadorServico;
 		}
@@ -138,14 +132,21 @@ public class CadastroUsuarioService {
 		throw new NegocioException("Objeto inválido.");
 	}
 
-	public List<Veiculo> adicionarVeiculos(PrestadorServico prestadorServico, List<Veiculo> veiculos) {
-		veiculos.stream().map(veiculo -> {
-			veiculo.setPrestadorServico(prestadorServico);
-			return veiculo;
-		}).collect(Collectors.toList());
+	public Veiculo adicionarVeiculo(PrestadorServico prestadorServico, Veiculo veiculo) {
+		veiculo.setPrestadorServico(prestadorServico);
+		return veiculoRepository.save(veiculo);
+	}
 
-		return veiculoRepository.saveAll(veiculos);
+	public void alterarSenha(Long usuarioId, String senhaAtual, String novaSenha) {
+		Usuario usuario = usuarioRepository.findById(usuarioId)
+				.orElseThrow(() -> new EntidadeNaoEncontradaException("Usuário [" + usuarioId + "] não encontrado."));
 
+		if (!senhaAtual.equals(usuario.getSenha())) {
+			throw new NegocioException("Senha atual informada não coincide com a senha do usuário.");
+		}
+
+		usuario.setSenha(novaSenha);
+		usuarioRepository.save(usuario);
 	}
 
 }

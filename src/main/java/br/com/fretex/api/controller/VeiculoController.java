@@ -1,7 +1,5 @@
 package br.com.fretex.api.controller;
 
-import java.util.List;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,18 +37,18 @@ public class VeiculoController {
 	private Mapper mapper;
 	
 	@PostMapping
-	public List<VeiculoModel> adicionar(@PathVariable Long usuarioId,@Valid @RequestBody List<VeiculoInput> veiculosInput) {
+	public VeiculoModel adicionar(@PathVariable Long usuarioId,@Valid @RequestBody VeiculoInput veiculoInput) {
 		Usuario usuario = usuarioRepository.findById(usuarioId)
 				.orElseThrow(() -> new EntidadeNaoEncontradaException("Usuário não encontrado"));
 		
 		PrestadorServico prestadorServico = prestadorServicoRepository.findByUsuario(usuario)
 				.orElseThrow(() -> new EntidadeNaoEncontradaException("Usuário não possui o perfil de prestador de serviço."));
 		
-		List<Veiculo> veiculos = mapper.toCollectionEntity(veiculosInput, Veiculo.class);		
+		Veiculo veiculo = mapper.toEntity(veiculoInput, Veiculo.class);		
 		
-		veiculos = cadastroUsuarioService.adicionarVeiculos(prestadorServico, veiculos);
+		veiculo = cadastroUsuarioService.adicionarVeiculo(prestadorServico, veiculo);
 		
-		return mapper.toCollectionModel(veiculos, VeiculoModel.class);
+		return mapper.toModel(veiculo, VeiculoModel.class);
 	}
 	
 	

@@ -20,9 +20,10 @@ public class Veiculo {
 	@ManyToOne
 	private PrestadorServico prestadorServico;
 	private String nome;
+	private String placa;
 	private BigDecimal pesoMaximo;
 	private String outrasCaracteristicas;
-	
+
 	@OneToMany(mappedBy = "veiculo")
 	private List<NegociacaoCarga> negociacoesCargas;
 
@@ -48,6 +49,14 @@ public class Veiculo {
 
 	public void setNome(String nome) {
 		this.nome = nome;
+	}
+
+	public String getPlaca() {
+		return placa;
+	}
+
+	public void setPlaca(String placa) {
+		this.placa = placa;
 	}
 
 	public BigDecimal getPesoMaximo() {

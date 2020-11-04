@@ -15,15 +15,22 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.fretex.api.model.UsuarioModel;
+import br.com.fretex.api.model.input.SenhaInput;
 import br.com.fretex.api.model.input.UsuarioInput;
+import br.com.fretex.api.model.input.UsuarioUpdateInput;
 import br.com.fretex.api.util.Mapper;
+import br.com.fretex.domain.exception.NegocioException;
+import br.com.fretex.domain.model.RecuperacaoSenha;
 import br.com.fretex.domain.model.Usuario;
+import br.com.fretex.domain.repository.RecuperacaoSenhaRepository;
 import br.com.fretex.domain.repository.UsuarioRepository;
 import br.com.fretex.domain.service.CadastroUsuarioService;
+import br.com.fretex.domain.service.RecuperacaoSenhaService;
 
 @RestController
 @RequestMapping("/usuarios")
@@ -33,15 +40,22 @@ public class UsuarioController {
 	private UsuarioRepository usuarioRepository;
 
 	@Autowired
+	private RecuperacaoSenhaRepository recuperacaoSenhaRepository;
+
+	@Autowired
 	private CadastroUsuarioService cadastroUsuarioService;
-	
+
+	@Autowired
+	private RecuperacaoSenhaService recuperacaoSenhaService;
+
 	@Autowired
 	private Mapper mapper;
 
 	@ResponseStatus(code = HttpStatus.CREATED)
 	@PostMapping
 	public UsuarioModel adicionar(@Valid @RequestBody UsuarioInput usuarioInput) {
-		return mapper.toModel(cadastroUsuarioService.salvar(mapper.toEntity(usuarioInput, Usuario.class)), UsuarioModel.class);
+		return mapper.toModel(cadastroUsuarioService.salvar(mapper.toEntity(usuarioInput, Usuario.class)),
+				UsuarioModel.class);
 	}
 
 	@GetMapping("/{usuarioId}")
@@ -61,7 +75,7 @@ public class UsuarioController {
 	}
 
 	@PutMapping("/{usuarioId}")
-	public ResponseEntity<UsuarioModel> atualizar(@Valid @RequestBody UsuarioInput usuarioInput,
+	public ResponseEntity<UsuarioModel> atualizar(@Valid @RequestBody UsuarioUpdateInput usuarioInput,
 			@PathVariable Long usuarioId) {
 		Optional<Usuario> usuarioExistente = usuarioRepository.findById(usuarioId);
 
@@ -71,8 +85,8 @@ public class UsuarioController {
 		var usuario = mapper.toEntity(usuarioInput, Usuario.class);
 
 		usuario.setId(usuarioId);
-		usuario.getEndereco().setId(usuarioExistente.get().getEndereco().getId());
 		usuario.getTelefone().setId(usuarioExistente.get().getTelefone().getId());
+		usuario.setSenha(usuarioExistente.get().getSenha());
 		usuario = cadastroUsuarioService.salvar(usuario);
 		return ResponseEntity.ok(mapper.toModel(usuario, UsuarioModel.class));
 	}
@@ -89,5 +103,38 @@ public class UsuarioController {
 
 		return ResponseEntity.noContent().build();
 	}
+
+	@PostMapping("recuperacao-senha")
+	public ResponseEntity<Void> recuperarSenha(@RequestParam String email) {
+		Optional<Usuario> usuario = usuarioRepository.findByEmail(email);
+
+		if (!usuario.isPresent()) {
+			return ResponseEntity.notFound().build();
+		}
+
+		recuperacaoSenhaService.recuperarSenha(usuario.get());
+
+		return ResponseEntity.noContent().build();
+	}
+
+	@PostMapping("redefinicao-senha")
+	public ResponseEntity<Void> redefinirSenha(
+			@RequestParam String codigoRecuperacao,
+			@RequestParam String novaSenha) {
+
+		RecuperacaoSenha recuperacaoSenha = recuperacaoSenhaRepository.findByCodigo(codigoRecuperacao)
+				.orElseThrow(() -> new NegocioException("Código de recuperação de senha inválido."));
+
+		recuperacaoSenha.getUsuario().setSenha(novaSenha);
+		recuperacaoSenhaService.redefinirSenha(recuperacaoSenha);
+
+		return ResponseEntity.noContent().build();
+	}
 	
+	@PutMapping("/{usuarioId}/senha")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void alterarSenha(@PathVariable Long usuarioId, @RequestBody @Valid SenhaInput senha) {
+		cadastroUsuarioService.alterarSenha(usuarioId, senha.getSenhaAtual(), senha.getNovaSenha());
+	}
+
 }
