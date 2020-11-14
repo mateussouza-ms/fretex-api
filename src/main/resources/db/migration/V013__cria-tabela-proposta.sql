@@ -7,6 +7,8 @@ CREATE TABLE proposta
 	aceita boolean,
 	usuario_responsavel_id bigint not null,
 	data_criacao timestamp not null,
+	data_retirada date,
+	data_entrega date,
 	
     PRIMARY KEY (id),
 	

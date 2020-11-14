@@ -10,6 +10,9 @@ CREATE TABLE carga
 	data_cadastro timestamp not null,
 	data_retirada timestamp,
 	data_entrega timestamp,
+	data_retirada_pretendida date,
+	data_entrega_pretendida date,
+	negocia_datas boolean,
 	
     PRIMARY KEY (id),
 	
