@@ -1,6 +1,7 @@
 package br.com.fretex.api.model.input;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
@@ -19,6 +20,9 @@ public class PropostaInput {
 	@Valid
 	@NotNull
 	private UsuarioIdInput usuarioResponsavel;
+
+	private LocalDate dataRetirada;
+	private LocalDate dataEntrega;
 
 	public BigDecimal getValor() {
 		return valor;
@@ -42,6 +46,22 @@ public class PropostaInput {
 
 	public void setUsuarioResponsavel(UsuarioIdInput usuarioResponsavel) {
 		this.usuarioResponsavel = usuarioResponsavel;
+	}
+
+	public LocalDate getDataRetirada() {
+		return dataRetirada;
+	}
+
+	public void setDataRetirada(LocalDate dataRetirada) {
+		this.dataRetirada = dataRetirada;
+	}
+
+	public LocalDate getDataEntrega() {
+		return dataEntrega;
+	}
+
+	public void setDataEntrega(LocalDate dataEntrega) {
+		this.dataEntrega = dataEntrega;
 	}
 
 }

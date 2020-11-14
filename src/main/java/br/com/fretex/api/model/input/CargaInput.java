@@ -1,6 +1,7 @@
 package br.com.fretex.api.model.input;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
@@ -31,6 +32,10 @@ public class CargaInput {
 
 	@Size(max = 120)
 	private String observacoes;
+
+	private LocalDate dataRetiradaPretendida;
+	private LocalDate dataEntregaPretendida;
+	private Boolean negociaDatas;
 
 	public ClienteIdInput getCliente() {
 		return cliente;
@@ -78,6 +83,30 @@ public class CargaInput {
 
 	public void setObservacoes(String observacoes) {
 		this.observacoes = observacoes;
+	}
+
+	public LocalDate getDataRetiradaPretendida() {
+		return dataRetiradaPretendida;
+	}
+
+	public void setDataRetiradaPretendida(LocalDate dataRetiradaPretendida) {
+		this.dataRetiradaPretendida = dataRetiradaPretendida;
+	}
+
+	public LocalDate getDataEntregaPretendida() {
+		return dataEntregaPretendida;
+	}
+
+	public void setDataEntregaPretendida(LocalDate dataEntregaPretendida) {
+		this.dataEntregaPretendida = dataEntregaPretendida;
+	}
+
+	public Boolean getNegociaDatas() {
+		return negociaDatas;
+	}
+
+	public void setNegociaDatas(Boolean negociaDatas) {
+		this.negociaDatas = negociaDatas;
 	}
 
 }

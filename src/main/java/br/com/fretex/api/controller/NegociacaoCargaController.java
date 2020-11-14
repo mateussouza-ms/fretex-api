@@ -55,6 +55,7 @@ public class NegociacaoCargaController {
 		Proposta proposta = mapper.toEntity(negociacaoCargaInput.getProposta(), Proposta.class);
 		proposta.setNegociacaoCarga(negociacaoCarga);
 		proposta.setDataCriacao(OffsetDateTime.now());
+		negociacaoCarga.setId(null);
 		negociacaoCarga.setCarga(carga);		
 		negociacaoCarga.setPropostas(new ArrayList<Proposta>());		
 		negociacaoCarga.getPropostas().add(proposta);

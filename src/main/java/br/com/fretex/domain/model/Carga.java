@@ -1,6 +1,7 @@
 package br.com.fretex.domain.model;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.List;
 
@@ -34,6 +35,9 @@ public class Carga {
 	private OffsetDateTime dataCadastro;
 	private OffsetDateTime dataRetirada;
 	private OffsetDateTime dataEntrega;
+	private LocalDate dataRetiradaPretendida;
+	private LocalDate dataEntregaPretendida;
+	private Boolean negociaDatas;
 
 	@OneToMany(mappedBy = "carga")
 	private List<NegociacaoCarga> negociacoes;
@@ -116,6 +120,30 @@ public class Carga {
 
 	public void setDataEntrega(OffsetDateTime dataEntrega) {
 		this.dataEntrega = dataEntrega;
+	}
+
+	public LocalDate getDataRetiradaPretendida() {
+		return dataRetiradaPretendida;
+	}
+
+	public void setDataRetiradaPretendida(LocalDate dataRetiradaPretendida) {
+		this.dataRetiradaPretendida = dataRetiradaPretendida;
+	}
+
+	public LocalDate getDataEntregaPretendida() {
+		return dataEntregaPretendida;
+	}
+
+	public void setDataEntregaPretendida(LocalDate dataEntregaPretendida) {
+		this.dataEntregaPretendida = dataEntregaPretendida;
+	}
+
+	public Boolean getNegociaDatas() {
+		return negociaDatas;
+	}
+
+	public void setNegociaDatas(Boolean negociaDatas) {
+		this.negociaDatas = negociaDatas;
 	}
 
 	public List<NegociacaoCarga> getNegociacoes() {

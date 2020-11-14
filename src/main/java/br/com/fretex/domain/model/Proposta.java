@@ -1,6 +1,7 @@
 package br.com.fretex.domain.model;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.OffsetDateTime;
 
 import javax.persistence.Entity;
@@ -28,6 +29,8 @@ public class Proposta {
 	private Usuario usuarioResponsavel;
 
 	private OffsetDateTime dataCriacao;
+	private LocalDate dataRetirada;
+	private LocalDate dataEntrega;
 
 	public Long getId() {
 		return id;
@@ -83,6 +86,22 @@ public class Proposta {
 
 	public void setDataCriacao(OffsetDateTime dataCriacao) {
 		this.dataCriacao = dataCriacao;
+	}
+
+	public LocalDate getDataRetirada() {
+		return dataRetirada;
+	}
+
+	public void setDataRetirada(LocalDate dataRetirada) {
+		this.dataRetirada = dataRetirada;
+	}
+
+	public LocalDate getDataEntrega() {
+		return dataEntrega;
+	}
+
+	public void setDataEntrega(LocalDate dataEntrega) {
+		this.dataEntrega = dataEntrega;
 	}
 
 	@Override
