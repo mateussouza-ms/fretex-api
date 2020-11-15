@@ -14,7 +14,7 @@ public class PropostaInput {
 	@Min(0)
 	private BigDecimal valor;
 
-	@Size(min = 1, max = 120)
+	@Size(max = 120)
 	private String justificativa;
 
 	@Valid
