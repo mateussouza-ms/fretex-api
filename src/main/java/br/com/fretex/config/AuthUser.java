@@ -13,12 +13,14 @@ public class AuthUser extends User {
 
 	private Long usuarioId;
 	private String usuarioNome;
+	private String usuarioEmail;
 
 	public AuthUser(Usuario usuario, Collection<? extends GrantedAuthority> authorities) {
 		super(usuario.getEmail(), usuario.getSenha(), authorities);
 
 		setUsuarioId(usuario.getId());
 		setUsuarioNome(usuario.getNome());
+		setUsuarioEmail(usuario.getEmail());
 	}
 
 	public Long getUsuarioId() {
@@ -35,6 +37,14 @@ public class AuthUser extends User {
 
 	public void setUsuarioNome(String usuarioNome) {
 		this.usuarioNome = usuarioNome;
+	}
+
+	public String getUsuarioEmail() {
+		return usuarioEmail;
+	}
+
+	public void setUsuarioEmail(String usuarioEmail) {
+		this.usuarioEmail = usuarioEmail;
 	}
 
 }
