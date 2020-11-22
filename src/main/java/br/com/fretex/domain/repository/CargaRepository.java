@@ -1,6 +1,5 @@
 package br.com.fretex.domain.repository;
 
-import java.time.OffsetDateTime;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -23,10 +22,10 @@ public interface CargaRepository extends JpaRepository<Carga, Long> {
 	public List<Carga> findByDataRetiradaIsNullAndNegociacoesStatusAndCliente(StatusNegocicacao statusNegocicacao,
 			Cliente cliente);
 
-	public List<Carga> findByDataEntregaIsNullAndDataRetiradaBeforeAndNegociacoesStatusAndCliente(
-			OffsetDateTime dataRetirada, StatusNegocicacao statusNegocicacao, Cliente cliente);
+	public List<Carga> findByDataEntregaIsNullAndDataRetiradaIsNotNullAndNegociacoesStatusAndCliente(
+			StatusNegocicacao statusNegocicacao, Cliente cliente);
 
-	public List<Carga> findByDataEntregaBeforeAndNegociacoesStatusAndCliente(OffsetDateTime dataEntrega,
+	public List<Carga> findByDataEntregaIsNotNullAndNegociacoesStatusAndCliente(
 			StatusNegocicacao statusNegocicacao, Cliente cliente);
 	
 	
@@ -36,10 +35,10 @@ public interface CargaRepository extends JpaRepository<Carga, Long> {
 
 	public List<Carga> findByDataRetiradaIsNullAndNegociacoesStatusAndNegociacoesVeiculoPrestadorServico(StatusNegocicacao statusNegocicacao, PrestadorServico prestadorServico);
 
-	public List<Carga> findByDataEntregaIsNullAndDataRetiradaBeforeAndNegociacoesStatusAndNegociacoesVeiculoPrestadorServico(OffsetDateTime dataRetirada,
+	public List<Carga> findByDataEntregaIsNullAndDataRetiradaIsNotNullAndNegociacoesStatusAndNegociacoesVeiculoPrestadorServico(
 			StatusNegocicacao statusNegocicacao, PrestadorServico prestadorServico);
 
-	public List<Carga> findByDataEntregaBeforeAndNegociacoesStatusAndNegociacoesVeiculoPrestadorServico(OffsetDateTime dataEntrega,
+	public List<Carga> findByDataEntregaIsNotNullAndNegociacoesStatusAndNegociacoesVeiculoPrestadorServico(
 			StatusNegocicacao statusNegocicacao, PrestadorServico prestadorServico);
 	
 	@Query( "SELECT carga												    \r\n" 

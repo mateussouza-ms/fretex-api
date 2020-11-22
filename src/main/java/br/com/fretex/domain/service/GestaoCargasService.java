@@ -81,12 +81,12 @@ public class GestaoCargasService {
 			}
 
 			if (situacao != null && situacao.equals("em-transporte")) {
-				return cargaRepository.findByDataEntregaIsNullAndDataRetiradaBeforeAndNegociacoesStatusAndCliente(
-						OffsetDateTime.now(), StatusNegocicacao.FINALIZADA_COM_ACORDO, cliente);
+				return cargaRepository.findByDataEntregaIsNullAndDataRetiradaIsNotNullAndNegociacoesStatusAndCliente(
+						StatusNegocicacao.FINALIZADA_COM_ACORDO, cliente);
 			}
 
 			if (situacao != null && situacao.equals("entregues")) {
-				return cargaRepository.findByDataEntregaBeforeAndNegociacoesStatusAndCliente(OffsetDateTime.now(),
+				return cargaRepository.findByDataEntregaIsNotNullAndNegociacoesStatusAndCliente(
 						StatusNegocicacao.FINALIZADA_COM_ACORDO, cliente);
 			}
 			
@@ -115,12 +115,12 @@ public class GestaoCargasService {
 			}
 
 			if (situacao != null && situacao.equals("em-transporte")) {
-				return cargaRepository.findByDataEntregaIsNullAndDataRetiradaBeforeAndNegociacoesStatusAndNegociacoesVeiculoPrestadorServico(
-						OffsetDateTime.now(), StatusNegocicacao.FINALIZADA_COM_ACORDO, prestadorServico);
+				return cargaRepository.findByDataEntregaIsNullAndDataRetiradaIsNotNullAndNegociacoesStatusAndNegociacoesVeiculoPrestadorServico(
+						StatusNegocicacao.FINALIZADA_COM_ACORDO, prestadorServico);
 			}
 
 			if (situacao != null && situacao.equals("entregues")) {
-				return cargaRepository.findByDataEntregaBeforeAndNegociacoesStatusAndNegociacoesVeiculoPrestadorServico(OffsetDateTime.now(),
+				return cargaRepository.findByDataEntregaIsNotNullAndNegociacoesStatusAndNegociacoesVeiculoPrestadorServico(
 						StatusNegocicacao.FINALIZADA_COM_ACORDO, prestadorServico);
 			}
 			

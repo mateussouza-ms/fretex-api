@@ -3,6 +3,7 @@ package br.com.fretex.domain.service;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import br.com.fretex.domain.exception.EntidadeNaoEncontradaException;
@@ -37,6 +38,9 @@ public class CadastroUsuarioService {
 
 	@Autowired
 	private CidadeRepository cidadeRepository;
+
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
 	public Usuario salvar(Usuario usuario) {
 
@@ -84,6 +88,10 @@ public class CadastroUsuarioService {
 		}
 
 		usuario.setSituacao(SituacaoUsuario.ATIVO);
+
+		if(usuario.getId() == null) {
+			usuario.setSenha(passwordEncoder.encode(usuario.getSenha()));
+		}
 
 		return usuarioRepository.save(usuario);
 	}
