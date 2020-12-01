@@ -4,7 +4,7 @@ insert into oauth_client_details (
   access_token_validity, refresh_token_validity, autoapprove
 )
 values (
-  'fretex-mobile', null, '123',
+  'fretex-mobile', null, '$2a$10$Kuydfq7DTScQoTVDpZTnLeFO08pl3hivz8uxl2YD43/8VcvbswaYO',
   'READ,WRITE', 'password', null, null,
   60 * 60 * 6, 60 * 24 * 60 * 60, null
 );
