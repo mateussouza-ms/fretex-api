@@ -1,0 +1,5 @@
+#Arquivo exemplo para configurações de email. Para seu uso, deve ser renomeado para mail.properties.
+mail.smtp.host=Servidor SMTP  [Exemplo: smtp.gmail.com]
+mail.smtp.port=Porta do servidor SMTP [Exemplo: 587]
+mail.smtp.username=Endereço de e-mail da conta utilizada para envio de e-mails [Exemplo: sistemafretex@gmail.com]
+mail.smtp.password=Senha da conta de e-mail

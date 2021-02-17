@@ -16,7 +16,7 @@
 	<description>APIs do sistema de contratação de fretes Fretex</description>
 
 	<properties>
-		<java.version>14</java.version>
+		<java.version>11</java.version>
 	</properties>
 
 	<dependencies>
