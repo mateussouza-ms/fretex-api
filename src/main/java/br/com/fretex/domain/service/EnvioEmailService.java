@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.core.env.Environment;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -18,22 +17,11 @@ public class EnvioEmailService {
 	@Autowired
 	private JavaMailSender javaMailSender;
 
-	@Autowired
-	private Environment env;
-
 	public void enviar(Mensagem mensagem) {
 		try {
 			SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
-
 			simpleMailMessage.setFrom(mensagem.getRemetente());
-
-			if (env.getProperty("mail.remetente-teste").isBlank()) {
-				simpleMailMessage
-						.setTo(mensagem.getDestinatarios().toArray(new String[mensagem.getDestinatarios().size()]));
-			} else {
-				simpleMailMessage.setTo(env.getProperty("mail.remetente-teste"));
-			}
-
+			simpleMailMessage.setTo(mensagem.getDestinatarios().toArray(new String[mensagem.getDestinatarios().size()]));
 			simpleMailMessage.setSubject(mensagem.getAssunto());
 			simpleMailMessage.setText(mensagem.getCorpo());
 
