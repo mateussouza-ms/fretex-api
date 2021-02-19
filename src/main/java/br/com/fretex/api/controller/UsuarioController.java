@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.fretex.api.model.UsuarioModel;
+import br.com.fretex.api.model.input.RecuperacaoSenhaInput;
+import br.com.fretex.api.model.input.RedefinicaoSenhaInput;
 import br.com.fretex.api.model.input.SenhaInput;
 import br.com.fretex.api.model.input.UsuarioInput;
 import br.com.fretex.api.model.input.UsuarioUpdateInput;
@@ -125,8 +127,8 @@ public class UsuarioController {
 	}
 
 	@PostMapping("recuperacao-senha")
-	public ResponseEntity<Void> recuperarSenha(@RequestParam String email) {
-		Optional<Usuario> usuario = usuarioRepository.findByEmail(email);
+	public ResponseEntity<Void> recuperarSenha(@RequestBody RecuperacaoSenhaInput recuperacaoSenhaInput) {
+		Optional<Usuario> usuario = usuarioRepository.findByEmail(recuperacaoSenhaInput.getEmail());
 
 		if (!usuario.isPresent()) {
 			return ResponseEntity.notFound().build();
@@ -138,14 +140,12 @@ public class UsuarioController {
 	}
 
 	@PostMapping("redefinicao-senha")
-	public ResponseEntity<Void> redefinirSenha(
-			@RequestParam String codigoRecuperacao,
-			@RequestParam String novaSenha) {
+	public ResponseEntity<Void> redefinirSenha(@RequestBody RedefinicaoSenhaInput redefinicaoSenhaInput) {
 
-		RecuperacaoSenha recuperacaoSenha = recuperacaoSenhaRepository.findByCodigo(codigoRecuperacao)
+		RecuperacaoSenha recuperacaoSenha = recuperacaoSenhaRepository.findByCodigo(redefinicaoSenhaInput.getCodigoRecuperacao())
 				.orElseThrow(() -> new NegocioException("Código de recuperação de senha inválido."));
 
-		recuperacaoSenha.getUsuario().setSenha(novaSenha);
+		recuperacaoSenha.getUsuario().setSenha(redefinicaoSenhaInput.getNovaSenha());
 		recuperacaoSenhaService.redefinirSenha(recuperacaoSenha);
 
 		return ResponseEntity.noContent().build();
