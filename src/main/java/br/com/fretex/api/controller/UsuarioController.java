@@ -8,6 +8,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,6 +25,7 @@ import br.com.fretex.api.model.input.SenhaInput;
 import br.com.fretex.api.model.input.UsuarioInput;
 import br.com.fretex.api.model.input.UsuarioUpdateInput;
 import br.com.fretex.api.util.Mapper;
+import br.com.fretex.config.AuthUser;
 import br.com.fretex.domain.exception.NegocioException;
 import br.com.fretex.domain.model.RecuperacaoSenha;
 import br.com.fretex.domain.model.Usuario;
@@ -60,6 +62,12 @@ public class UsuarioController {
 
 	@GetMapping("/{usuarioId}")
 	public ResponseEntity<UsuarioModel> buscar(@PathVariable Long usuarioId) {
+		AuthUser usuarioLogado = (AuthUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		
+		if (!usuarioLogado.getUsuarioId().equals(usuarioId)) {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+		}
+		
 		Optional<Usuario> usuario = usuarioRepository.findById(usuarioId);
 
 		if (!usuario.isPresent()) {
@@ -77,6 +85,12 @@ public class UsuarioController {
 	@PutMapping("/{usuarioId}")
 	public ResponseEntity<UsuarioModel> atualizar(@Valid @RequestBody UsuarioUpdateInput usuarioInput,
 			@PathVariable Long usuarioId) {
+		AuthUser usuarioLogado = (AuthUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		
+		if (!usuarioLogado.getUsuarioId().equals(usuarioId)) {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+		}
+		
 		Optional<Usuario> usuarioExistente = usuarioRepository.findById(usuarioId);
 
 		if (!usuarioExistente.isPresent()) {
@@ -93,6 +107,12 @@ public class UsuarioController {
 
 	@DeleteMapping("/{usuarioId}")
 	public ResponseEntity<Void> desativar(@PathVariable Long usuarioId) {
+		AuthUser usuarioLogado = (AuthUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		
+		if (!usuarioLogado.getUsuarioId().equals(usuarioId)) {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+		}
+		
 		Optional<Usuario> usuario = usuarioRepository.findById(usuarioId);
 
 		if (!usuario.isPresent()) {
@@ -133,8 +153,15 @@ public class UsuarioController {
 	
 	@PutMapping("/{usuarioId}/senha")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void alterarSenha(@PathVariable Long usuarioId, @RequestBody @Valid SenhaInput senha) {
+	public ResponseEntity<Void> alterarSenha(@PathVariable Long usuarioId, @RequestBody @Valid SenhaInput senha) {
+		AuthUser usuarioLogado = (AuthUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		
+		if (!usuarioLogado.getUsuarioId().equals(usuarioId)) {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+		}
+		
 		cadastroUsuarioService.alterarSenha(usuarioId, senha.getSenhaAtual(), senha.getNovaSenha());
+		return ResponseEntity.noContent().build();
 	}
 
 }

@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import br.com.fretex.domain.exception.NegocioException;
@@ -21,6 +22,9 @@ public class RecuperacaoSenhaService {
 
 	@Autowired
 	private EnvioEmailService envioEmailService;
+	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
 	public void recuperarSenha(Usuario usuario) {
 		RecuperacaoSenha recuperacaoSenha = new RecuperacaoSenha();
@@ -48,6 +52,7 @@ public class RecuperacaoSenhaService {
 			throw new NegocioException("Código de recuperação de senha inválido.");
 		}
 
+		recuperacaoSenha.getUsuario().setSenha(passwordEncoder.encode(recuperacaoSenha.getUsuario().getSenha()));
 		recuperacaoSenha.setUtilizado(true);
 		recuperacaoSenhaRepository.save(recuperacaoSenha);
 

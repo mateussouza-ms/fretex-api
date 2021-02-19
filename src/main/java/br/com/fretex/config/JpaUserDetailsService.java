@@ -38,7 +38,6 @@ public class JpaUserDetailsService implements UserDetailsService {
 		}
 
 		if (!usuario.isPresent()) {
-			System.out.println("UsernameNotFoundException");
 			throw new UsernameNotFoundException("Usuário não encontrado com o e-mail informado");
 		}
 

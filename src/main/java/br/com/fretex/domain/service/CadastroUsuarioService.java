@@ -149,11 +149,11 @@ public class CadastroUsuarioService {
 		Usuario usuario = usuarioRepository.findById(usuarioId)
 				.orElseThrow(() -> new EntidadeNaoEncontradaException("Usuário [" + usuarioId + "] não encontrado."));
 
-		if (!senhaAtual.equals(usuario.getSenha())) {
+		if (!passwordEncoder.matches(senhaAtual, usuario.getSenha())) {
 			throw new NegocioException("Senha atual informada não coincide com a senha do usuário.");
 		}
 
-		usuario.setSenha(novaSenha);
+		usuario.setSenha(passwordEncoder.encode(novaSenha));
 		usuarioRepository.save(usuario);
 	}
 
