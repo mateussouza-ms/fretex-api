@@ -15,7 +15,7 @@ public class AuthUser extends User {
 	private String usuarioNome;
 	private String usuarioEmail;
 
-	public AuthUser(Usuario usuario, Collection<? extends GrantedAuthority> authorities) {
+	public AuthUser(Usuario usuario, Collection<? extends JpaUserDetailsService.Perfil> authorities) {
 		super(usuario.getEmail(), usuario.getSenha(), authorities);
 
 		setUsuarioId(usuario.getId());

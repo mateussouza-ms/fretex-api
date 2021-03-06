@@ -41,17 +41,54 @@ public class JpaUserDetailsService implements UserDetailsService {
 			throw new UsernameNotFoundException("Usuário não encontrado com o e-mail informado");
 		}
 
-		List<GrantedAuthority> authorities = new ArrayList<>();
+		List<Perfil> authorities = new ArrayList<>();
 
 		if (prestadorServicoRepository.findByUsuario(usuario.get()).isPresent()) {
-			authorities.add(new SimpleGrantedAuthority(ConstPerfil.PRESTADOR_SERVICOS));
+			authorities.add(new Perfil(1L, ConstPerfil.PRESTADOR_SERVICOS));
 		}
 
 		if (clienteRepository.findByUsuarioId(usuario.get().getId()).isPresent()) {
-			authorities.add(new SimpleGrantedAuthority(ConstPerfil.CLIENTE));
+			authorities.add(new Perfil(2L, ConstPerfil.CLIENTE));
 		}
 
 		return new AuthUser(usuario.get(), authorities);
+	}
+
+	class Perfil implements GrantedAuthority{
+
+		private static final long serialVersionUID = 1L;
+		
+		private Long id;
+		private String perfil;
+
+		public Perfil(Long id, String perfil) {
+			super();
+			this.id = id;
+			this.perfil = perfil;
+		}
+
+		public Long getId() {
+			return id;
+		}
+
+		public void setId(Long id) {
+			this.id = id;
+		}
+
+		public String getPerfil() {
+			return perfil;
+		}
+
+		public void setPerfil(String perfil) {
+			this.perfil = perfil;
+		}
+
+		@Override
+		public String getAuthority() {
+			// TODO Auto-generated method stub
+			return this.perfil;
+		}
+
 	}
 
 }
